@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export const Pagefooter = () => {
   return (
-    <footer className="bg-gray-200 p-10">
+    <footer className="bg-gray-200 p-10 fixed bottom-0 w-full">
       <div className="flex justify-center">
         <Image
           width={100}

@@ -12,6 +12,7 @@ const config: Config = {
         vsvBlueDark: "#1C1E3D",
         vsvBlueLight: "#008CFF",
         vsvGray: "#959596",
+        vsvGrayLight: "#F8F8F8",
       },
     },
   },

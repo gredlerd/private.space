@@ -1,10 +1,6 @@
 import { Pageheader } from "../components/Pageheader";
+import { QuestionPage } from "../components/QuestionPage";
 
 export default function Home() {
-  return (
-    <main>
-      <h1>hallo test seite</h1>
-      <Pageheader />
-    </main>
-  );
+  return <main></main>;
 }
