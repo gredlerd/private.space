@@ -25,7 +25,7 @@ export const QuestionPage = ({
       <div
         className={`w-full  h-52 items-center flex justify-center font-bold text-3xl flex-col
         ${status === "green" && "bg-green-600"}
-        ${status === "gray" && "bg-gray-600"}
+        ${status === "gray" && "bg-vsvGray"}
         ${status === "red" && "bg-red-600"}
       `}
       >
@@ -46,7 +46,7 @@ export const QuestionPage = ({
         />
         <div className="flex flex-col gap-3 w-full">
           <input
-            className="text-xl font-bold text-gray-400 text-center w-full border-2 rounded-lg p-4 border-gray-600 bg-gray-200"
+            className="text-xl font-bold text-vsvGray text-center w-full border-2 rounded-lg p-4 border-vsvGray bg-gray-200"
             placeholder={
               status === "red"
                 ? "Absagegrund eingeben..."
@@ -57,7 +57,7 @@ export const QuestionPage = ({
           <button
             className={`text-xl w-full  border rounded-lg  p-4
         ${status === "green" && "bg-green-600"}
-        ${status === "gray" && "bg-gray-600"}
+        ${status === "gray" && "bg-vsvGray"}
         ${status === "red" && "bg-red-600"}
         `}
             onClick={closeModal}
@@ -67,7 +67,7 @@ export const QuestionPage = ({
             {status === "red" && <p>Event absagen</p>}
           </button>
           <button
-            className="text-xl font-bold text-gray-400 w-full border-2 rounded-lg p-4 border-gray-600"
+            className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray"
             onClick={closeModal}
           >
             Abbrechen

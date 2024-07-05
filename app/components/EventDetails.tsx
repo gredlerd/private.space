@@ -19,13 +19,13 @@ export const EventDetails = ({
   return (
     <div
       className={`${
-        layout === "light" ? "text-white" : "text-gray-600"
+        layout === "light" ? "text-white" : "text-vsvGray"
       } flex flex-col gap-3`}
     >
       <span className="text-xl flex justify-center font-bold mb-4 ">
         {title}
       </span>
-      <div className="flex justify-between">
+      <div className="flex justify-between text-lg">
         <span>
           <Calendar />
         </span>
@@ -33,7 +33,7 @@ export const EventDetails = ({
       </div>
 
       <hr className="border-t-2 border-gray-300" />
-      <div className="flex justify-between">
+      <div className="flex justify-between text-lg">
         <span>
           <Clock />
         </span>
@@ -41,7 +41,7 @@ export const EventDetails = ({
       </div>
 
       <hr className="border-t-2 border-gray-300" />
-      <div className="flex justify-between">
+      <div className="flex justify-between text-lg">
         <span>
           <MapPin />
         </span>
