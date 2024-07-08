@@ -1,5 +1,5 @@
-import { EventCard } from "./components/EventCard";
-import { NextEvent } from "./components/NextEvent";
+import { EventCard } from "../components/EventCard";
+import { NextEvent } from "../components/NextEvent";
 
 export default function Home() {
   return (
