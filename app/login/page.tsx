@@ -3,7 +3,7 @@ import LoginLayout from "./layout";
 
 export default function Home() {
   return (
-    <main className="p-5">
+    <main className="p-5 bg-vsvGrayLight">
       <div className="flex justify-center items-center flex-col gap-2 text-vsvGray w-full">
         <h1 className="font-bold text-4xl pb-8 pt-28">Login</h1>
         <input
