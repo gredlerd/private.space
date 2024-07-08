@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Pageheader } from "../components/Pageheader";
 import "../globals.css";
+import ClientProvider from "../components/react-query/ClientProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,10 +15,12 @@ export default function LoginLayout({
 }>) {
   return (
     <html>
-      <body>
-        <Pageheader />
-        {children}
-      </body>
+      <ClientProvider>
+        <body>
+          <Pageheader />
+          {children}
+        </body>
+      </ClientProvider>
     </html>
   );
 }
