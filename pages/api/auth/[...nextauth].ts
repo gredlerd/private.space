@@ -36,12 +36,16 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
+      console.log("JWT Token:", token); // Loggen Sie den JWT-Token vor der Verarbeitung
+
       if (user) {
         token.id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
+      console.log("Session:", session); // Loggen Sie die Sitzungsinformationen vor der Verarbeitung
+
       if (token) {
         // @ts-ignore
         session.user.id = token.id;

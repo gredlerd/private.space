@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface Inputs {
   identifier: string;
@@ -27,28 +28,29 @@ export default function Login() {
     resolver: yupResolver(schema),
   });
 
+  const [loginError, setLoginError] = useState(false);
+
   const router = useRouter();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const result = await signIn("credentials", {
-      redirect: false,
-      identifier: data.identifier,
-      password: data.password,
-    });
+    setLoginError(false);
+    try {
+      const result = await signIn("credentials", {
+        redirect: false,
+        identifier: data.identifier,
+        password: data.password,
+      });
 
-    if (result && result.error) {
-      console.error("Login fehlgeschlagen:", result.error); // Log the error
-      // Handle error display or redirect here
-      return; // Prevent further execution
-    }
-
-    if (result?.ok) {
-      router.push("/dashboard");
-    } else {
-      console.error("Login fehlgeschlagen"); // Log generic login failure
+      if (result && result.error) {
+        setLoginError(true);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      setLoginError(true);
+      console.error("Login error:", error);
     }
   };
-
   return (
     <main className="p-5 bg-vsvGrayLight">
       <form
@@ -83,6 +85,11 @@ export default function Login() {
           Einloggen
         </button>
       </form>
+      {loginError && (
+        <p className="pt-5 text-left w-full text-red-600 text-xs">
+          Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.
+        </p>
+      )}
     </main>
   );
 }

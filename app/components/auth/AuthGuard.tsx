@@ -17,10 +17,6 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
     }
   }, [status, router]);
 
-  // if (status === "loading") {
-  //   return <div>Loading...</div>;
-  // }
-
   return session ? <>{children}</> : null;
 };
 
