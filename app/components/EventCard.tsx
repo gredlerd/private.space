@@ -1,19 +1,20 @@
-import {
-  Calendar,
-  CircleHelp,
-  Clock1,
-  ThumbsDown,
-  ThumbsUp,
-} from "lucide-react";
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { EventButton } from "./EventButton";
 import { EventDetails } from "./EventDetails";
+import { EventParticipants } from "./EventParticipants";
 
 export const EventCard = () => {
+  const [modal, setModal] = useState(false);
+
+  const handleModalClose = () => {
+    setModal(false);
+  };
+
   return (
     <section className="flex flex-col items-center justify-between">
       <div className="flex w-full flex-col shadow-lg m-10 rounded-lg bg-vsvGray text-white">
-        <div className="p-4">
+        <div className="p-4" onClick={() => setModal(true)}>
           <EventDetails
             date={"03.07.2024"}
             location={"DiaMir Stiege 2"}
@@ -56,6 +57,12 @@ export const EventCard = () => {
           Alle Events anzeigen
         </button>
       </div>
+      {modal && (
+        <EventParticipants
+          title={"Sommertraining"}
+          closeModal={handleModalClose}
+        />
+      )}
     </section>
   );
 };
