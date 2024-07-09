@@ -6,7 +6,7 @@ import { EventDetails } from "./EventDetails";
 type QuestionPageProps = {
   closeModal: () => void;
   status: "green" | "gray" | "red";
-  date: string;
+  date: Date;
   location: string;
   title: string;
   time: string;

@@ -1,10 +1,10 @@
 "use client";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { signIn } from "next-auth/react";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import * as yup from "yup";
 
 interface Inputs {
   identifier: string;

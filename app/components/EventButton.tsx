@@ -6,8 +6,8 @@ import { QuestionPage } from "./QuestionPage";
 
 type EventButtonProps = {
   status: "green" | "gray" | "red";
-  participant: number;
-  date: string;
+  participant?: number;
+  date: Date;
   location: string;
   title: string;
   time: string;
