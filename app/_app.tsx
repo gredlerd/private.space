@@ -1,7 +1,7 @@
 import { setAuthToken } from "@/config/axios-config";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
-import { Head } from "next/document";
+import Head from "next/head";
 import { useEffect } from "react";
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {

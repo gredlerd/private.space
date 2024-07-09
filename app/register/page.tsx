@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import * as yup from "yup";
 import { useRegisterUser } from "../hooks/useRegisterUser";
 
 interface Inputs {
@@ -16,8 +16,8 @@ interface Inputs {
 }
 
 const schema = yup.object().shape({
-  firstName: yup.string().required("Vorname ist erforderlich."),
-  lastName: yup.string().required("Nachname ist erforderlich."),
+  firstname: yup.string().required("Vorname ist erforderlich."),
+  lastname: yup.string().required("Nachname ist erforderlich."),
   birthdate: yup
     .date()
     .required("Geburtsdatum ist erforderlich.")
@@ -51,7 +51,6 @@ const Register = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setRegisterError(false);
-
     mutate({ ...data, username: data.email });
   };
 
@@ -134,8 +133,8 @@ const Register = () => {
           Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.
         </p>
       )}
-      {isError && <p>error beim anlegen des users</p>}
-      {isLoading && <p>loading... adding user...</p>}
+      {/* {isError && <p>error beim anlegen des users</p>}
+      {isLoading && <p>loading... adding user...</p>} */}
     </main>
   );
 };
