@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
+import { PageHeadline } from "../components/PageHeadline";
 
 interface Inputs {
   identifier: string;
@@ -57,7 +58,7 @@ export default function Login() {
         className="flex justify-center items-center flex-col gap-2 text-vsvGray w-full"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h1 className="font-bold text-4xl pb-8 pt-28">Login</h1>
+        <PageHeadline title={"Login"} />
         <input
           className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray opacity-60"
           placeholder="E-Mail"
