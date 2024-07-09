@@ -3,7 +3,7 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://192.168.8.87:1337/api",
+  baseURL: "http://localhost:1337/api",
   timeout: 3000,
 });
 

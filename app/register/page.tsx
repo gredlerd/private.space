@@ -1,14 +1,14 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
-import { registerUser } from "../../pages/api/registerUser";
+import { useRegisterUser } from "../hooks/useRegisterUser";
 
 interface Inputs {
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   birthdate: string;
   email: string;
   password: string;
@@ -32,7 +32,7 @@ const schema = yup.object().shape({
     .required("Passwort ist erforderlich."),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("password"), null], "Passwörter müssen übereinstimmen")
+    .oneOf([yup.ref("password")], "Passwörter müssen übereinstimmen")
     .required("Passwortbestätigung ist erforderlich."),
 });
 
@@ -47,17 +47,12 @@ const Register = () => {
 
   const [registerError, setRegisterError] = useState(false);
   const router = useRouter();
+  const { mutate, isError, isLoading, isSuccess } = useRegisterUser();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setRegisterError(false);
 
-    try {
-      await registerUser(data); // Verwende die Funktion registerUser zur Registrierung
-      router.push("/login");
-    } catch (error) {
-      setRegisterError(true);
-      console.error("Registrierungsfehler:", error.message);
-    }
+    mutate({ ...data, username: data.email });
   };
 
   return (
@@ -71,20 +66,20 @@ const Register = () => {
           className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray opacity-60"
           placeholder="Vorname"
           type="text"
-          {...register("firstName")}
+          {...register("firstname")}
         />
         <p className="text-left w-full text-red-600 text-xs">
-          {errors.firstName?.message}
+          {errors.firstname?.message}
         </p>
 
         <input
           className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray opacity-60"
           placeholder="Nachname"
           type="text"
-          {...register("lastName")}
+          {...register("lastname")}
         />
         <p className="text-left w-full text-red-600 text-xs">
-          {errors.lastName?.message}
+          {errors.lastname?.message}
         </p>
 
         <input
@@ -139,6 +134,8 @@ const Register = () => {
           Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.
         </p>
       )}
+      {isError && <p>error beim anlegen des users</p>}
+      {isLoading && <p>loading... adding user...</p>}
     </main>
   );
 };
