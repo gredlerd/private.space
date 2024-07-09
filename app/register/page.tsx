@@ -1,9 +1,10 @@
 "use client";
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { registerUser } from "../../pages/api/registerUser";
 
 interface Inputs {
   firstName: string;
@@ -35,7 +36,7 @@ const schema = yup.object().shape({
     .required("Passwortbestätigung ist erforderlich."),
 });
 
-export default function Register() {
+const Register = () => {
   const {
     register,
     handleSubmit,
@@ -45,18 +46,17 @@ export default function Register() {
   });
 
   const [registerError, setRegisterError] = useState(false);
-
   const router = useRouter();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setRegisterError(false);
+
     try {
-      // Hier würdest du deine Registrierung logik einfügen, z.B. ein API-Call
-      console.log("Registrierungsdaten:", data);
-      router.push("/welcome");
+      await registerUser(data); // Verwende die Funktion registerUser zur Registrierung
+      router.push("/login");
     } catch (error) {
       setRegisterError(true);
-      console.error("Registrierungsfehler:", error);
+      console.error("Registrierungsfehler:", error.message);
     }
   };
 
@@ -141,4 +141,6 @@ export default function Register() {
       )}
     </main>
   );
-}
+};
+
+export default Register;

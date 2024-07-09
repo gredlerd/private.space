@@ -1,6 +1,12 @@
 "use client"; // Sicherstellen, dass die Komponente nur auf dem Client gerendert wird
 
-import { BarChart3, Calendar, Euro, UserRound } from "lucide-react";
+import {
+  BarChart3,
+  Calendar,
+  CircleUserRound,
+  Euro,
+  UserRound,
+} from "lucide-react";
 import { useRouter } from "next/navigation"; // Importieren des neuen useRouter-Hooks
 import { useEffect, useState } from "react";
 
@@ -57,6 +63,15 @@ export const Pagefooter = () => {
           <Euro />
         </span>
         <span>Kassa</span>
+      </button>
+      <button
+        className="flex flex-col items-center mr-3"
+        onClick={() => navigateTo("/dashboard/administrator")}
+      >
+        <span>
+          <CircleUserRound />
+        </span>
+        <span>Admin</span>
       </button>
     </footer>
   );
