@@ -20,7 +20,7 @@ export const Pagefooter = () => {
     }
   }, []);
 
-  const navigateTo = (path) => {
+  const navigateTo = (path: string) => {
     if (isClient) {
       router.push(path);
     }

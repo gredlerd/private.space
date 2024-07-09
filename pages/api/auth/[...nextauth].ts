@@ -1,26 +1,69 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import { loginUser } from "../loginUser";
+
+// Erweitern Sie die Session-Typen
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    jwt: string;
+    user: {
+      id: number;
+      username: string;
+      email: string;
+      firstname: string;
+      lastname: string;
+    } & DefaultSession["user"];
+  }
+
+  interface User {
+    jwt: string;
+    id: number;
+    username: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+  }
+}
+
+// Erweitern Sie den JWT-Typ
+declare module "next-auth/jwt" {
+  interface JWT {
+    jwt: string;
+    id: number;
+    username: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
+      name: "Credentials",
       credentials: {
         identifier: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        if (!credentials?.identifier || !credentials?.password) {
+          return null;
+        }
         try {
           const user = await loginUser({
-            identifier: credentials?.identifier ?? "",
-            password: credentials?.password ?? "",
+            identifier: credentials.identifier,
+            password: credentials.password,
           });
 
-          if (user) {
-            return Promise.resolve(user);
+          if (user && user.user) {
+            return {
+              ...user.user,
+              jwt: user.jwt,
+            };
           } else {
-            return Promise.resolve(null);
+            return null;
           }
         } catch (error) {
           console.error("Fehler bei der Autorisierung:", error);
@@ -32,6 +75,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: {
+    strategy: "jwt",
     maxAge: 36 * 24 * 60 * 60,
     updateAge: 24 * 60 * 60,
   },
@@ -42,21 +86,26 @@ export const authOptions: NextAuthOptions = {
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
-      console.log("JWT Token:", token); // Loggen Sie den JWT-Token vor der Verarbeitung
-
+    async jwt({ token, user }: { token: JWT; user?: any }) {
       if (user) {
+        token.jwt = user.jwt;
         token.id = user.id;
+        token.username = user.username;
+        token.email = user.email;
+        token.firstname = user.firstname;
+        token.lastname = user.lastname;
       }
       return token;
     },
-    async session({ session, token }) {
-      console.log("Session:", session); // Loggen Sie die Sitzungsinformationen vor der Verarbeitung
-
-      if (token) {
-        // @ts-ignore
-        session.user.id = token.id;
-      }
+    async session({ session, token }: { session: any; token: JWT }) {
+      session.jwt = token.jwt;
+      session.user = {
+        id: token.id,
+        username: token.username,
+        email: token.email,
+        firstname: token.firstname,
+        lastname: token.lastname,
+      };
       return session;
     },
   },

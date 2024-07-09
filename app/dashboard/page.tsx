@@ -1,21 +1,27 @@
-import { Clock } from "lucide-react";
-import AuthGuard from "../components/auth/AuthGuard";
+"use client";
+import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import { EventCard } from "../components/EventCard";
-import { PageHeadline } from "../components/PageHeadline";
+import { useGetAllEvents } from "../hooks/useGetAllEvents";
+import { EventType } from "@/types/event";
 
 export default function Home() {
+  const { data } = useGetAllEvents();
+
   return (
-    <AuthGuard>
-      <main className="p-6 flex flex-col justify-start w-full min-h-screen bg-vsvGrayLight">
-        <PageHeadline title={"Nächstes Event"} />
-        <div className="gap-2 py-4 font-bold items-center text-xl flex justify-center flex-row w-full text-vsvGray">
-          <span>
-            <Clock />
-          </span>
-          <span>12 Stunden & 40 Minuten</span>
-        </div>
-        <EventCard />
-      </main>
-    </AuthGuard>
+    <main className="p-6 flex flex-col justify-start w-full min-h-screen bg-vsvGrayLight">
+      {data && (
+        <>
+          {data.data.map((event: EventType) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+        </>
+      )}
+      {/* <div className="w-full flex justify-center">
+        <button className="w-full border-2 border-vsvGray p-5 rounded-lg text-xl font-bold text-vsvGray">
+          Alle Events anzeigen
+        </button>
+      </div> */}
+    </main>
   );
 }

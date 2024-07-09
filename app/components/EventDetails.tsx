@@ -2,7 +2,7 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 import React from "react";
 
 type EventDetailsProps = {
-  date: string;
+  date: Date;
   location: string;
   title: string;
   time: string;
@@ -29,7 +29,7 @@ export const EventDetails = ({
         <span>
           <Calendar />
         </span>
-        <span>{date}</span>
+        <span>{String(date)}</span>
       </div>
 
       <hr className="border-t-2 border-gray-300" />
