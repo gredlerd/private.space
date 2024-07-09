@@ -52,7 +52,7 @@ export default function Login() {
     }
   };
   return (
-    <main className="p-5 bg-vsvGrayLight">
+    <main className="p-6 flex flex-col justify-start w-full min-h-screen bg-vsvGrayLight">
       <form
         className="flex justify-center items-center flex-col gap-2 text-vsvGray w-full"
         onSubmit={handleSubmit(onSubmit)}

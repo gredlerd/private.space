@@ -31,6 +31,13 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  session: {
+    maxAge: 36 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
+  },
+  jwt: {
+    maxAge: 365 * 24 * 60 * 60,
+  },
   pages: {
     signIn: "/login",
   },
