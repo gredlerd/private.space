@@ -4,12 +4,14 @@ import { useSession } from "next-auth/react";
 import { EventCard } from "../components/EventCard";
 import { useGetAllEvents } from "../hooks/useGetAllEvents";
 import { EventType } from "@/types/event";
+import { PageHeadline } from "../components/PageHeadline";
 
 export default function Home() {
   const { data } = useGetAllEvents();
 
   return (
     <main className="p-6 flex flex-col justify-start w-full min-h-screen bg-vsvGrayLight">
+      <PageHeadline title={"Nächstes Event"} />
       {data && (
         <>
           {data.data.map((event: EventType) => (

@@ -7,7 +7,8 @@ import * as yup from "yup";
 import { PageHeadline } from "../../components/PageHeadline";
 import OverLayout from "../../components/OverLayout/overLayout";
 import { RegisterData, useNewEvent } from "../../hooks/useNewEvent";
-import { NewEventType } from "@/types/newEvent"; // Adjust path as per your project structure
+import { NewEventType } from "@/types/newEvent";
+import { format } from "date-fns";
 
 interface EventInputs {
   title: string;
@@ -40,18 +41,50 @@ const CreateEvent = () => {
 
   const onSubmit: SubmitHandler<EventInputs> = async (dataInput) => {
     setSubmissionError(false);
+    console.log(dataInput);
 
-    mutate({ data: { ...dataInput } });
+    if (dataInput.endTime !== "") {
+      mutate({
+        data: {
+          location: dataInput.location,
+          startTime: String(
+            format(
+              new Date(`1970-01-01T${dataInput.startTime}`),
+              "HH:mm:ss.SSS"
+            )
+          ),
+          eventDate: dataInput.eventDate,
+          title: dataInput.title,
+          endTime: String(
+            format(new Date(`1970-01-01T${dataInput.endTime}`), "HH:mm:ss.SSS")
+          ),
+        },
+      });
+    } else {
+      mutate({
+        data: {
+          location: dataInput.location,
+          startTime: String(
+            format(
+              new Date(`1970-01-01T${dataInput.startTime}`),
+              "HH:mm:ss.SSS"
+            )
+          ),
+          eventDate: dataInput.eventDate,
+          title: dataInput.title,
+        },
+      });
+    }
   };
 
   return (
     <OverLayout>
       <div>
+        <PageHeadline title={"Veranstaltung erstellen"} />
         <form
           className="flex justify-center items-center flex-col gap-2 text-vsvGray w-full"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <PageHeadline title={"Veranstaltung erstellen"} />
           <input
             className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray opacity-60"
             placeholder="Titel"
@@ -82,12 +115,15 @@ const CreateEvent = () => {
             {errors.startTime?.message}
           </p>
 
-          <input
+          <select
             className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray opacity-60"
-            placeholder="Ort"
-            type="text"
             {...register("location")}
-          />
+          >
+            <option value="">Wählen Sie einen Standort</option>
+            <option value="Stiege 1">Stiege 1</option>
+            <option value="Stiege 2">Stiege 2</option>
+            <option value="Outdoor">Outdoor</option>
+          </select>
           <p className="text-left w-full text-red-600 text-xs">
             {errors.location?.message}
           </p>

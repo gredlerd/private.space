@@ -7,10 +7,11 @@ import { QuestionPage } from "./QuestionPage";
 type EventButtonProps = {
   status: "green" | "gray" | "red";
   participant?: number;
-  date: Date;
+  date: string;
   location: string;
   title: string;
-  time: string;
+  startTime: string;
+  endTime?: string;
 };
 
 export const EventButton = ({
@@ -19,7 +20,8 @@ export const EventButton = ({
   date,
   location,
   title,
-  time,
+  startTime,
+  endTime,
 }: EventButtonProps) => {
   const [modal, setModal] = useState(false);
 
@@ -44,7 +46,8 @@ export const EventButton = ({
           date={date}
           location={location}
           title={title}
-          time={time}
+          startTime={startTime}
+          endTime={endTime}
         />
       )}
     </>

@@ -1,4 +1,3 @@
-import { Clock } from "lucide-react";
 import React from "react";
 
 type PageHeadlineProps = {
@@ -7,10 +6,8 @@ type PageHeadlineProps = {
 
 export const PageHeadline = ({ title }: PageHeadlineProps) => {
   return (
-    <div className="flex justify-center flex-col text-vsvGray gap-3 items-center">
-      <div className="text-4xl font-bold">
-        <h1>{title}</h1>
-      </div>
+    <div className="flex justify-center items-center flex-col text-vsvGray gap-3">
+      <h1 className="text-4xl font-bold">{title}</h1>
     </div>
   );
 };

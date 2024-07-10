@@ -1,22 +1,19 @@
 import { CircleHelp, ThumbsDown, ThumbsUp } from "lucide-react";
 import { Span } from "next/dist/trace";
 import React from "react";
-import { EventDetails } from "./EventDetails";
+import { EventDetails, EventDetailsProps } from "./EventDetails";
 
-type QuestionPageProps = {
+type QuestionPageProps = EventDetailsProps & {
   closeModal: () => void;
   status: "green" | "gray" | "red";
-  date: Date;
-  location: string;
-  title: string;
-  time: string;
 };
 
 export const QuestionPage = ({
   closeModal,
   status,
   date,
-  time,
+  startTime,
+  endTime,
   location,
   title,
 }: QuestionPageProps) => {
@@ -39,7 +36,8 @@ export const QuestionPage = ({
       <div className="flex flex-col w-full p-5 h-full justify-between">
         <EventDetails
           date={date}
-          time={time}
+          startTime={startTime}
+          endTime={endTime}
           title={title}
           location={location}
           layout={"dark"}
