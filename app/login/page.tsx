@@ -6,6 +6,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { PageHeadline } from "../components/PageHeadline";
+import OverLayout from "../components/OverLayout/overLayout";
 
 interface Inputs {
   identifier: string;
@@ -53,44 +54,46 @@ export default function Login() {
     }
   };
   return (
-    <main className="p-6 flex flex-col justify-start w-full min-h-screen bg-vsvGrayLight">
-      <form
-        className="flex justify-center items-center flex-col gap-2 text-vsvGray w-full"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <PageHeadline title={"Login"} />
-        <input
-          className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray opacity-60"
-          placeholder="E-Mail"
-          type="text"
-          {...register("identifier")}
-        />
-        <p className="text-left w-full text-red-600 text-xs">
-          {errors.identifier?.message}
-        </p>
-
-        <input
-          className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray opacity-60"
-          placeholder="Passwort"
-          type="password"
-          {...register("password")}
-        />
-        <p className="text-left w-full text-red-600 text-xs">
-          {errors.password?.message}
-        </p>
-
-        <button
-          type="submit"
-          className="text-xl font-bold bg-vsvGray text-white w-full border-2 rounded-lg p-4 border-vsvGray"
+    <OverLayout>
+      <div>
+        <form
+          className="flex justify-center items-center flex-col gap-2 text-vsvGray w-full"
+          onSubmit={handleSubmit(onSubmit)}
         >
-          Einloggen
-        </button>
-      </form>
-      {loginError && (
-        <p className="pt-5 text-left w-full text-red-600 text-xs">
-          Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.
-        </p>
-      )}
-    </main>
+          <PageHeadline title={"Login"} />
+          <input
+            className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray opacity-60"
+            placeholder="E-Mail"
+            type="text"
+            {...register("identifier")}
+          />
+          <p className="text-left w-full text-red-600 text-xs">
+            {errors.identifier?.message}
+          </p>
+
+          <input
+            className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray opacity-60"
+            placeholder="Passwort"
+            type="password"
+            {...register("password")}
+          />
+          <p className="text-left w-full text-red-600 text-xs">
+            {errors.password?.message}
+          </p>
+
+          <button
+            type="submit"
+            className="text-xl font-bold bg-vsvGray text-white w-full border-2 rounded-lg p-4 border-vsvGray"
+          >
+            Einloggen
+          </button>
+        </form>
+        {loginError && (
+          <p className="pt-5 text-left w-full text-red-600 text-xs">
+            Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.
+          </p>
+        )}
+      </div>
+    </OverLayout>
   );
 }

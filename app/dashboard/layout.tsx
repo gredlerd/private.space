@@ -1,4 +1,5 @@
 "use client";
+import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { ReactNode } from "react";
 import AuthGuard from "../components/auth/AuthGuard";

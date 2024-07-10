@@ -8,7 +8,7 @@ type PageHeadlineProps = {
 export const PageHeadline = ({ title }: PageHeadlineProps) => {
   return (
     <div className="flex justify-center flex-col text-vsvGray gap-3 items-center">
-      <div className="text-3xl font-bold">
+      <div className="text-4xl font-bold">
         <h1>{title}</h1>
       </div>
     </div>
