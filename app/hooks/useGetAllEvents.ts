@@ -6,7 +6,7 @@ export async function getAllEvents() {
   try {
     const currentDate = new Date().toISOString();
     const response = await axiosInstance.get(
-      `/events?populate=*&sort=eventDate:asc&filter[eventDate][$gt]=${currentDate}`
+      `/events?populate=*&sort=eventDate:asc&filters[eventDate][$gt]=${currentDate}`
     );
     return response.data as EventArray;
   } catch (error) {
