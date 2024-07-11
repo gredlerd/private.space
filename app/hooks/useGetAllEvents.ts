@@ -4,7 +4,10 @@ import { useQuery } from "react-query";
 
 export async function getAllEvents() {
   try {
-    const response = await axiosInstance.get(`/events?populate=*`);
+    const currentDate = new Date().toISOString();
+    const response = await axiosInstance.get(
+      `/events?populate=*&sort=eventDate:asc&filter[eventDate][$gt]=${currentDate}`
+    );
     return response.data as EventArray;
   } catch (error) {
     console.error("Error fetching locations:", error);

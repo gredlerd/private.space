@@ -80,7 +80,10 @@ const CreateEvent = () => {
   return (
     <OverLayout>
       <div>
-        <PageHeadline title={"Veranstaltung erstellen"} />
+        <div className="flex flex-col">
+          <PageHeadline title={"Veranstaltung"} />
+          <PageHeadline title={"erstellen"} />
+        </div>
         <form
           className="flex justify-center items-center flex-col gap-2 text-vsvGray w-full"
           onSubmit={handleSubmit(onSubmit)}

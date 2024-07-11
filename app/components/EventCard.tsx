@@ -4,7 +4,7 @@ import { EventButton } from "./EventButton";
 import { EventDetails } from "./EventDetails";
 import { EventParticipants } from "./EventParticipants";
 import { EventType } from "@/types/event";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 
 type EventCardProps = {
   event: EventType;
@@ -17,15 +17,28 @@ export const EventCard = ({ event }: EventCardProps) => {
     setModal(false);
   };
 
-  const formattedDate = String(
-    format(new Date(event.attributes.eventDate), "dd.MM.yyyy")
+  const formattedDate = format(
+    new Date(event.attributes.eventDate),
+    "dd.MM.yyyy"
   );
-  const formattedStartTime = String(
-    format(new Date(`1970-01-01T${event.attributes.startTime}`), "HH:mm")
+
+  let formattedEndTime = "";
+
+  if (event.attributes.endTime) {
+    const parsedTimeEnd = parse(
+      event.attributes.endTime,
+      "HH:mm:ss.SSS",
+      new Date()
+    );
+    formattedEndTime = format(parsedTimeEnd, "HH:mm");
+  }
+
+  const parsedTimeStart = parse(
+    event.attributes.startTime,
+    "HH:mm:ss.SSS",
+    new Date()
   );
-  const formattedEndTime = String(
-    format(new Date(`1970-01-01T${event.attributes.endTime}`), "HH:mm")
-  );
+  const formattedStartTime = format(parsedTimeStart, "HH:mm");
 
   return (
     <div className="flex flex-col items-center justify-between">
