@@ -53,6 +53,11 @@ export default function Login() {
       console.error("Login error:", error);
     }
   };
+
+  const handleRegisterClick = () => {
+    router.push("/register");
+  };
+
   return (
     <OverLayout>
       <div>
@@ -87,6 +92,16 @@ export default function Login() {
           >
             Einloggen
           </button>
+          <div className="flex flex-row text-sm gap-3">
+            <p>Du hast noch kein Konto?</p>
+            <button
+              type="button"
+              onClick={handleRegisterClick}
+              className="text-blue-400 underline"
+            >
+              <p> Jetzt registrieren</p>
+            </button>
+          </div>
         </form>
         {loginError && (
           <p className="pt-5 text-left w-full text-red-600 text-xs">
