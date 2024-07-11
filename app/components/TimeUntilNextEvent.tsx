@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import { EventType } from "@/types/event";
 
 type TimeUntilNextEventProps = {
-  nextEvent: EventType;
+  actualTime: string;
+  nextEvent: EventType | null;
 };
 
 const calculateTimeDifference = (currentTime: Date, nextEventTime: Date) => {
@@ -16,23 +17,20 @@ const calculateTimeDifference = (currentTime: Date, nextEventTime: Date) => {
   return { days, hours, minutes };
 };
 
-export const TimeUntilNextEvent = ({ nextEvent }: TimeUntilNextEventProps) => {
+export const TimeUntilNextEvent = ({
+  actualTime,
+  nextEvent,
+}: TimeUntilNextEventProps) => {
   const [timeUntil, setTimeUntil] = useState({ days: 0, hours: 0, minutes: 0 });
 
   useEffect(() => {
-    const updateTimer = () => {
-      const currentTime = new Date();
+    if (nextEvent) {
+      const currentTime = new Date(actualTime);
       const nextEventTime = new Date(nextEvent.attributes.eventDate);
       const timeDiff = calculateTimeDifference(currentTime, nextEventTime);
       setTimeUntil(timeDiff);
-    };
-
-    updateTimer();
-
-    const timerId = setInterval(updateTimer, 1000);
-
-    return () => clearInterval(timerId);
-  }, [nextEvent]);
+    }
+  }, [actualTime, nextEvent]);
 
   return (
     <div className="flex flex-row gap-2 justify-center items-center pt-2 text-vsvGray">
@@ -40,12 +38,12 @@ export const TimeUntilNextEvent = ({ nextEvent }: TimeUntilNextEventProps) => {
         <Clock />
       </span>
       <span>
-        {timeUntil.days > 0 && <>{timeUntil.days} Tage </>}
-        {timeUntil.hours > 0 && <>{timeUntil.hours} Stunden </>}
-        {timeUntil.minutes > 0 && <>{timeUntil.minutes} Minuten </>}
+        {timeUntil.days > 0 && <>{timeUntil.days}d </>}
+        {timeUntil.hours > 0 && <>{timeUntil.hours}h </>}
+        {timeUntil.minutes > 0 && <>{timeUntil.minutes}m </>}
         {timeUntil.days === 0 &&
           timeUntil.hours === 0 &&
-          timeUntil.minutes === 0 && <>Event startet!</>}
+          timeUntil.minutes === 0 && <>Jetzt! </>}
       </span>
     </div>
   );
