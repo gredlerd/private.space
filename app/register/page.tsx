@@ -56,10 +56,6 @@ const Register = () => {
     mutate({ ...data, username: data.email });
   };
 
-  const handleRegisterClick = () => {
-    router.push("/register");
-  };
-
   return (
     <OverLayout>
       <div>
