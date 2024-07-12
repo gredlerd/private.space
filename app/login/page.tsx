@@ -92,7 +92,7 @@ export default function Login() {
           >
             Einloggen
           </button>
-          <div className="flex flex-row text-sm gap-3">
+          <div className="flex flex-row text-base gap-3">
             <p>Du hast noch kein Konto?</p>
             <button
               type="button"
