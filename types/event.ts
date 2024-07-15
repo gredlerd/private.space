@@ -2,7 +2,7 @@ export type EventType = {
   id: number;
   attributes: {
     title: string;
-    eventDate: Date;
+    eventDate: string;
     startTime: string;
     endTime: string;
     location: string;

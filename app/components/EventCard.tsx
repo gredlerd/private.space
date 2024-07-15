@@ -1,4 +1,5 @@
 "use client";
+import { CircleHelp, ThumbsDown, ThumbsUp } from "lucide-react";
 import React, { useState } from "react";
 import { EventButton } from "./EventButton";
 import { EventDetails } from "./EventDetails";
@@ -91,7 +92,7 @@ export const EventCard = ({ event }: EventCardProps) => {
           </div>
           <div className="flex flex-row gap-3 items-center m-2">
             <span>bearbeiten</span>
-            <EditButton />
+            <EditButton event={event} />
           </div>
         </div>
       </div>

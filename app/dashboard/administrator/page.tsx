@@ -27,21 +27,17 @@ const schema = yup.object().shape({
   endTime: yup.string().optional(),
 });
 
-const deleteSchema = yup.object().shape({
-  title: yup.string().required("Titel ist erforderlich."),
-});
-
 const CreateEvent = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<EventInputs>({
+    //@ts-ignore
     resolver: yupResolver(schema),
   });
 
   const [submissionError, setSubmissionError] = useState(false);
-  const router = useRouter();
   const { mutate } = useNewEvent();
 
   const onSubmit: SubmitHandler<EventInputs> = async (dataInput) => {

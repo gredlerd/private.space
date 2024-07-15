@@ -2,8 +2,13 @@ import { Pencil } from "lucide-react";
 import React from "react";
 import { useState } from "react";
 import { EventEdit } from "./EventEdit";
+import { EventType } from "@/types/event";
 
-export const EditButton = () => {
+type EditButtonProps = {
+  event: EventType;
+};
+
+export const EditButton = ({ event }: EditButtonProps) => {
   const [editModal, setEditModal] = useState(false);
 
   return (
@@ -14,7 +19,9 @@ export const EditButton = () => {
       >
         <Pencil />
       </button>
-      {editModal && <EventEdit closeModal={() => setEditModal(false)} />}
+      {editModal && (
+        <EventEdit closeModal={() => setEditModal(false)} event={event} />
+      )}
     </div>
   );
 };
