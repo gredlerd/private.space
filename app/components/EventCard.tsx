@@ -5,6 +5,9 @@ import { EventDetails } from "./EventDetails";
 import { EventParticipants } from "./EventParticipants";
 import { EventType } from "@/types/event";
 import { format, parse } from "date-fns";
+import { DeleteButton } from "./DeleteButton";
+import { EventEdit } from "./EventEdit";
+import { EditButton } from "./EditButton";
 
 type EventCardProps = {
   event: EventType;
@@ -43,7 +46,7 @@ export const EventCard = ({ event }: EventCardProps) => {
   return (
     <div className="flex flex-col items-center justify-between">
       <div className="flex w-full flex-col shadow-lg m-10 rounded-lg bg-vsvGray text-white">
-        <div className="p-4" onClick={() => setModal(true)}>
+        <div className="relative p-4" onClick={() => setModal(true)}>
           <EventDetails
             date={formattedDate}
             location={event.attributes.location}
@@ -81,11 +84,21 @@ export const EventCard = ({ event }: EventCardProps) => {
             endTime={formattedEndTime}
           />
         </div>
+        <div className="flex gap-2 items-center justify-between m-2">
+          <div className="flex flex-row gap-3 items-center m-2">
+            <DeleteButton eventId={String(event.id)} />
+            <span>löschen</span>
+          </div>
+          <div className="flex flex-row gap-3 items-center m-2">
+            <span>bearbeiten</span>
+            <EditButton />
+          </div>
+        </div>
       </div>
 
       {modal && (
         <EventParticipants
-          title={"Sommertraining"}
+          title={event.attributes.title}
           closeModal={handleModalClose}
         />
       )}

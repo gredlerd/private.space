@@ -43,15 +43,6 @@ export const QuestionPage = ({
           layout={"dark"}
         />
         <div className="flex flex-col gap-3 w-full">
-          <input
-            className="text-xl font-bold text-vsvGray text-center w-full border-2 rounded-lg p-4 border-vsvGray bg-gray-200"
-            placeholder={
-              status === "red"
-                ? "Absagegrund eingeben..."
-                : "Nachricht eingeben..."
-            }
-            type="text"
-          />
           <button
             className={`text-xl w-full  border rounded-lg  p-4
         ${status === "green" && "bg-green-600"}
