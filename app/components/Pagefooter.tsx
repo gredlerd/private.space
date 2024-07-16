@@ -1,5 +1,4 @@
-"use client"; // Sicherstellen, dass die Komponente nur auf dem Client gerendert wird
-
+"use client";
 import {
   BarChart3,
   Calendar,
@@ -7,12 +6,14 @@ import {
   Euro,
   UserRound,
 } from "lucide-react";
-import { useRouter } from "next/navigation"; // Importieren des neuen useRouter-Hooks
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 export const Pagefooter = () => {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -64,15 +65,18 @@ export const Pagefooter = () => {
         </span>
         <span>Kassa</span>
       </button>
-      <button
-        className="flex flex-col items-center mr-3"
-        onClick={() => navigateTo("/dashboard/administrator")}
-      >
-        <span>
-          <CircleUserRound />
-        </span>
-        <span>Admin</span>
-      </button>
+
+      {session?.user.isAdmin && (
+        <button
+          className="flex flex-col items-center mr-3"
+          onClick={() => navigateTo("/dashboard/administrator")}
+        >
+          <span>
+            <CircleUserRound />
+          </span>
+          <span>Admin</span>
+        </button>
+      )}
     </footer>
   );
 };

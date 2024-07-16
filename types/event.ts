@@ -9,6 +9,9 @@ export type EventType = {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
+    confirmed: number[];
+    tentative: number[];
+    cancelled: number[];
   };
 };
 

@@ -15,7 +15,7 @@ export const EventParticipants = ({
     <div className="fixed top-0 left-0 h-screen w-full bg-gray-200 flex items-center z-50 flex-col justify-between">
       <div className="w-full h-52 items-center flex justify-center flex-col bg-vsvGray text-white">
         <div className="flex flex-row gap-4 items-center">
-          <p className=" font-bold text-3xl">Teilnehmerliste</p>
+          <p className="font-bold text-3xl">Teilnehmerliste</p>
           <span>
             <ScrollText />
           </span>

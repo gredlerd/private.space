@@ -14,6 +14,8 @@ declare module "next-auth" {
       email: string;
       firstname: string;
       lastname: string;
+      isAdmin: boolean;
+      birthdate: string;
     } & DefaultSession["user"];
   }
 
@@ -24,6 +26,8 @@ declare module "next-auth" {
     email: string;
     firstname: string;
     lastname: string;
+    isAdmin: boolean;
+    birthdate: string;
   }
 }
 
@@ -36,6 +40,8 @@ declare module "next-auth/jwt" {
     email: string;
     firstname: string;
     lastname: string;
+    isAdmin: boolean;
+    birthdate: string;
   }
 }
 
@@ -94,6 +100,8 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.firstname = user.firstname;
         token.lastname = user.lastname;
+        token.isAdmin = user.isAdmin;
+        token.birthdate = user.birthdate;
       }
       return token;
     },
@@ -105,6 +113,8 @@ export const authOptions: NextAuthOptions = {
         email: token.email,
         firstname: token.firstname,
         lastname: token.lastname,
+        isAdmin: token.isAdmin,
+        birthdate: token.birthdate,
       };
       return session;
     },

@@ -1,13 +1,14 @@
 import { AlarmClockOff, Calendar, Clock, MapPin } from "lucide-react";
 import React from "react";
 
-type EventDetailsProps = {
+export type EventDetailsProps = {
   date: string;
   location: string;
   title: string;
   startTime: string;
   endTime?: string;
   layout: "light" | "dark";
+  confirmed?: string[];
 };
 
 export const EventDetails = ({

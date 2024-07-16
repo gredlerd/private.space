@@ -1,28 +1,15 @@
 "use client";
 import { CircleHelp, ThumbsDown, ThumbsUp } from "lucide-react";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { QuestionPage } from "./QuestionPage";
+import { EventType } from "@/types/event";
 
 type EventButtonProps = {
   status: "green" | "gray" | "red";
-  participant?: number;
-  date: string;
-  location: string;
-  title: string;
-  startTime: string;
-  endTime?: string;
+  event: EventType;
 };
 
-export const EventButton = ({
-  status,
-  participant,
-  date,
-  location,
-  title,
-  startTime,
-  endTime,
-}: EventButtonProps) => {
+export const EventButton = ({ status, event }: EventButtonProps) => {
   const [modal, setModal] = useState(false);
 
   return (
@@ -37,17 +24,25 @@ export const EventButton = ({
         {status === "green" && <ThumbsUp />}
         {status === "gray" && <CircleHelp />}
         {status === "red" && <ThumbsDown />}
-        <div> {participant} </div>
+        <div>
+          {status === "green"
+            ? event.attributes.confirmed.length
+            : status === "gray"
+            ? event.attributes.tentative.length
+            : event.attributes.cancelled.length}
+        </div>
       </button>
       {modal && (
         <QuestionPage
           closeModal={() => setModal(false)}
           status={status}
-          date={date}
-          location={location}
-          title={title}
-          startTime={startTime}
-          endTime={endTime}
+          date={event.attributes.eventDate}
+          startTime={event.attributes.startTime}
+          endTime={event.attributes.endTime}
+          location={event.attributes.location}
+          title={event.attributes.title}
+          eventId={event.id.toString()}
+          layout={"dark"}
         />
       )}
     </>

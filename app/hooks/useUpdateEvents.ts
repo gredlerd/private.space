@@ -1,15 +1,17 @@
 import axiosInstance from "@/config/axios-config";
-import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "react-query";
 
 export interface UpdateEventData {
-  id: number;
+  id: string;
   data: {
-    title: string;
-    eventDate: string;
-    startTime: string;
-    location: string;
+    title?: string;
+    eventDate?: Date;
+    startTime?: string;
+    location?: string;
     endTime?: string;
+    confirmed?: any[];
+    tentative?: any[];
+    cancelled?: any[];
   };
 }
 
@@ -25,13 +27,10 @@ export async function updateEvent({ id, data }: UpdateEventData) {
 
 export const useUpdateEvent = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
-
   return useMutation({
     mutationFn: (data: UpdateEventData) => updateEvent(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["allEvents"] });
-      router.push("/dashboard");
     },
   });
 };
