@@ -3,5 +3,6 @@ export type UserType = {
   username: string;
   firstname: string;
   lastname: string;
-  birthdate: Date;
+  birthdate: string;
+  email: string;
 };

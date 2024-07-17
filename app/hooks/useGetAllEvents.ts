@@ -8,6 +8,7 @@ export async function getAllEvents() {
     const response = await axiosInstance.get(
       `/events?populate=deep,10&sort[0]=eventDate:asc&sort[1]=startTime:asc&filters[eventDate][$gt]=${currentDate}`
     );
+    console.log(response);
     return response.data as EventArray;
   } catch (error) {
     console.error("Error fetching locations:", error);

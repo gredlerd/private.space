@@ -5,7 +5,7 @@ export interface UpdateEventData {
   id: string;
   data: {
     title?: string;
-    eventDate?: Date;
+    eventDate?: string;
     startTime?: string;
     location?: string;
     endTime?: string;

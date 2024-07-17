@@ -26,7 +26,7 @@ interface EventInputs {
   eventDate: string;
   startTime: string;
   location: string;
-  endTime: string;
+  endTime?: string | null;
 }
 
 export const EventEdit = ({ closeModal, event }: EventEditProps) => {
@@ -53,14 +53,30 @@ export const EventEdit = ({ closeModal, event }: EventEditProps) => {
   const { mutate: updateEvent } = useUpdateEvent();
 
   const onSubmit: SubmitHandler<EventInputs> = (data) => {
-    const formattedData = {
-      id: event.id,
-      data: {
-        ...data,
-        eventDate: format(data.eventDate, "yyyy-MM-dd"),
-      },
-    };
+    console.log(data);
+    let formattedData;
+    if (data.endTime != "") {
+      formattedData = {
+        id: event.id,
+        data: {
+          ...data,
+          endTime: data.endTime,
+          eventDate: format(data.eventDate, "yyyy-MM-dd"),
+        },
+      };
+    } else {
+      formattedData = {
+        id: event.id,
+        data: {
+          ...data,
+          endTime: null,
+          eventDate: format(data.eventDate, "yyyy-MM-dd"),
+        },
+      };
+    }
+
     console.log();
+    //@ts-ignore
     updateEvent(formattedData);
     closeModal();
   };
