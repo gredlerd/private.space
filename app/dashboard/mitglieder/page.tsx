@@ -1,7 +1,7 @@
 "use client";
 import { PageHeadline } from "@/app/components/PageHeadline";
 import React from "react";
-import { useGetAllUsers } from "../../hooks/useGetAllUsers";
+import { useGetAllUsers } from "@/app/hooks/useGetAllUsers";
 import { UserType } from "@/types/user";
 import OverLayout from "@/app/components/OverLayout/overLayout";
 import UserList from "@/app/components/UserList";

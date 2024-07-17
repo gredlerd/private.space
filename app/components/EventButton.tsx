@@ -24,13 +24,6 @@ export const EventButton = ({ status, event }: EventButtonProps) => {
         {status === "green" && <ThumbsUp />}
         {status === "gray" && <CircleHelp />}
         {status === "red" && <ThumbsDown />}
-        <div>
-          {status === "green"
-            ? event.attributes.confirmed.length
-            : status === "gray"
-            ? event.attributes.tentative.length
-            : event.attributes.cancelled.length}
-        </div>
       </button>
       {modal && (
         <QuestionPage
