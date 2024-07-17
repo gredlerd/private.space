@@ -1,43 +1,83 @@
+"use client";
 import React from "react";
-import { UserType } from "@/types/user";
+import { PageHeadline } from "./PageHeadline";
+import { BookOpen, Mail, Contact, CalendarFold } from "lucide-react";
+import { Session } from "next-auth";
 
 type UserDetailsModalProps = {
-  user: UserType;
+  user: Session["user"];
   closeModal: () => void;
 };
 
 const UserDetailsModal = ({ user, closeModal }: UserDetailsModalProps) => {
   const formattedBirthdate = user.birthdate
-    ? new Date(user.birthdate).toLocaleDateString()
+    ? new Date(user.birthdate).toLocaleDateString("de-DE", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      })
     : "N/A";
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-full bg- flex items-center z-50 flex-col justify-center">
-      <div className="bg-white p-5 rounded-lg shadow-lg flex flex-col justify-center items-center">
-        <h2 className="flex justify-center text-2xl font-bold mb-4">
-          User Details
-        </h2>
-        <p>
-          <strong>Vorname:</strong> {user.firstname}
-        </p>
-        <p>
-          <strong>Nachname</strong> {user.lastname}
-        </p>
-        <p>
-          <strong>Email:</strong> {user.email}
-        </p>
-        <p>
-          <strong>Username:</strong> {user.username}
-        </p>
-        <p>
-          <strong>Geburtstdatum:</strong> {formattedBirthdate}
-        </p>
-        <button
-          className="mt-4 bg-red-600 text-white px-4 py-2 rounded"
-          onClick={closeModal}
-        >
-          Schließen
-        </button>
+    <div className="fixed top-0 left-0 h-screen w-full bg-vsvGrayLight flex items-center z-50 flex-col justify-between">
+      <div className="pt-10 w-full p-5">
+        <div className="flex justify-center font-bold mb-4 text-vsvGray">
+          <PageHeadline title={"User Details"} />
+        </div>
+        <div className="flex items-center flex-col text-xl pt-6">
+          <div className="w-full flex justify-between items-center">
+            <span>
+              <strong className="text-vsvGray">Vorname:</strong>{" "}
+              {user.firstname}
+            </span>
+            <span>
+              <BookOpen />
+            </span>
+          </div>
+          <div className="w-full flex justify-between items-center">
+            <span>
+              <strong className="text-vsvGray">Nachname:</strong>{" "}
+              {user.lastname}
+            </span>
+            <span>
+              <BookOpen />
+            </span>
+          </div>
+          <div className="w-full flex justify-between items-center">
+            <span>
+              <strong className="text-vsvGray">Email:</strong> {user.email}
+            </span>
+            <span>
+              <Mail />
+            </span>
+          </div>
+          <div className="w-full flex justify-between items-center">
+            <span>
+              <strong className="text-vsvGray">Username:</strong>{" "}
+              {user.username}
+            </span>
+            <span>
+              <Contact />
+            </span>
+          </div>
+          <div className="w-full flex justify-between items-center">
+            <span>
+              <strong className="text-vsvGray">Geburtsdatum:</strong>{" "}
+              {formattedBirthdate}
+            </span>
+            <span>
+              <CalendarFold />
+            </span>
+          </div>
+        </div>
+        <div className="pt-10">
+          <button
+            className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray"
+            onClick={closeModal}
+          >
+            Schließen
+          </button>
+        </div>
       </div>
     </div>
   );

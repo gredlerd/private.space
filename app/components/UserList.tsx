@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { UserType } from "@/types/user";
-import { UserRoundCheck } from "lucide-react";
+import { Ellipsis, Info, UserRoundCheck } from "lucide-react";
 import UserDetailsModal from "./UserDetails";
 
 type UserListProps = {
@@ -16,8 +16,12 @@ const UserList = ({ user }: UserListProps) => {
   return (
     <div className="flex flex-col" key={user.id}>
       <div className="flex flex-row items-center justify-between text-vsvGray">
-        <button className="p-2" onClick={openModal}>
+        <button
+          className="p-2 flex flex-row items-center gap-2"
+          onClick={openModal}
+        >
           {user.firstname} {user.lastname}
+          <Ellipsis />
         </button>
         <span>
           <UserRoundCheck />
