@@ -30,22 +30,26 @@ export default function Home() {
 
   return (
     <main className="p-6 flex flex-col justify-start w-full min-h-screen bg-vsvGrayLight">
-      <UseSession />
-      <PageHeadline title={"Nächstes Event"} />
-      {isLoading && <p>Loading...</p>}
-      {isError && <p>Error loading events.</p>}
-      {nextEvent ? (
-        <TimeUntilNextEvent nextEvent={nextEvent} />
-      ) : (
-        <p>Keine bevorstehenden Events gefunden.</p>
-      )}
-      {allEvents && (
-        <>
-          {allEvents.data.map((event: EventType) => (
-            <EventCard key={event.id} event={event} />
-          ))}
-        </>
-      )}
+      <div className="flex flex-col gap-3 pb-6">
+        <UseSession />
+        <PageHeadline title={"Nächstes Event"} />
+        {isLoading && <p>Loading...</p>}
+        {isError && <p>Error loading events.</p>}
+        {nextEvent ? (
+          <TimeUntilNextEvent nextEvent={nextEvent} />
+        ) : (
+          <p>Keine bevorstehenden Events gefunden.</p>
+        )}
+      </div>
+      <div className="flex flex-col gap-6">
+        {allEvents && (
+          <>
+            {allEvents.data.map((event: EventType) => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </>
+        )}
+      </div>
     </main>
   );
 }

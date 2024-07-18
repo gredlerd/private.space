@@ -1,15 +1,27 @@
 import { CircleHelp, ThumbsDown, ThumbsUp } from "lucide-react";
 import React from "react";
 import { EventButton } from "./EventButton";
+import { UserType } from "@/types/user";
+
+export type ParticipantType = {
+  id: number;
+  attributes: {
+    username: string;
+    firstname: string;
+    lastname: string;
+    birthdate: string;
+    email: string;
+  };
+};
 
 type ParticipantsDetailsProps = {
-  ConfirmendParticipant: string;
-  TentativeParticipant: string;
-  CancelledParticipant: string;
+  ConfirmedParticipant: ParticipantType[];
+  TentativeParticipant: ParticipantType[];
+  CancelledParticipant: ParticipantType[];
 };
 
 export const ParticipantsDetails = ({
-  ConfirmendParticipant,
+  ConfirmedParticipant,
   TentativeParticipant,
   CancelledParticipant,
 }: ParticipantsDetailsProps) => {
@@ -22,14 +34,13 @@ export const ParticipantsDetails = ({
         </div>
         <hr className="border-t-2 border-green-600 my-3 w-full" />
         <div className="flex items-center justify-between">
-          <span className="text-lg">{ConfirmendParticipant}</span>
-          <EventButton
-            status="green"
-            date="2024-07-16"
-            location="Location"
-            title="Event Title"
-            startTime="10:00"
-          />
+          {ConfirmedParticipant.map((el) => (
+            <div key={el.id}>
+              <span className="text-lg">
+                {el.attributes.firstname} {el.attributes.lastname}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
       <div>
@@ -39,14 +50,13 @@ export const ParticipantsDetails = ({
         </div>
         <hr className="border-t-2 border-vsvGray my-3 w-full" />
         <div className="flex items-center justify-between">
-          <span className="text-lg">{TentativeParticipant}</span>
-          <EventButton
-            status="gray"
-            date="2024-07-16"
-            location="Location"
-            title="Event Title"
-            startTime="10:00"
-          />
+          {TentativeParticipant.map((el) => (
+            <div key={el.id}>
+              <span className="text-lg">
+                {el.attributes.firstname} {el.attributes.lastname}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
       <div>
@@ -56,14 +66,13 @@ export const ParticipantsDetails = ({
         </div>
         <hr className="border-t-2 border-red-600 my-3 w-full" />
         <div className="flex items-center justify-between">
-          <span className="text-lg">{CancelledParticipant}</span>
-          <EventButton
-            status="red"
-            date="2024-07-16"
-            location="Location"
-            title="Event Title"
-            startTime="10:00"
-          />
+          {CancelledParticipant.map((el) => (
+            <div key={el.id}>
+              <span className="text-lg">
+                {el.attributes.firstname} {el.attributes.lastname}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

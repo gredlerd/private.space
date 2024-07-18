@@ -45,7 +45,7 @@ export const TimeUntilNextEvent = ({ nextEvent }: TimeUntilNextEventProps) => {
     return () => clearInterval(timerId);
   }, [nextEvent]);
   return (
-    <div className="flex flex-row gap-2 justify-center items-center pt-2 text-vsvGray">
+    <div className="flex flex-row gap-2 justify-center items-center text-vsvGray">
       <span>
         <Clock />
       </span>

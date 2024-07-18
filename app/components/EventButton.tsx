@@ -3,28 +3,41 @@ import { CircleHelp, ThumbsDown, ThumbsUp } from "lucide-react";
 import React, { useState } from "react";
 import { QuestionPage } from "./QuestionPage";
 import { EventType } from "@/types/event";
+import { ParticipantType } from "./ParticipantsDetails";
 
 type EventButtonProps = {
   status: "green" | "gray" | "red";
   event: EventType;
+  participants?: number;
+  confirmedUserUntilNow?: ParticipantType[];
 };
 
-export const EventButton = ({ status, event }: EventButtonProps) => {
+export const EventButton = ({
+  status,
+  event,
+  participants,
+  confirmedUserUntilNow,
+}: EventButtonProps) => {
   const [modal, setModal] = useState(false);
 
   return (
     <>
-      <button
-        onClick={() => setModal(true)}
-        className={`gap-2 py-4 font-bold items-center text-xl flex justify-center flex-row w-full bg-white 
-        ${status === "green" && "text-green-600 rounded-bl-md"}
-        ${status === "gray" && "text-vsvGray"}
-        ${status === "red" && "text-red-600 rounded-br-md"}`}
-      >
-        {status === "green" && <ThumbsUp />}
-        {status === "gray" && <CircleHelp />}
-        {status === "red" && <ThumbsDown />}
-      </button>
+      <div className="flex flex-col items-center w-full">
+        <button
+          onClick={() => setModal(true)}
+          className={`gap-2 py-4 font-bold items-center text-xl flex justify-center flex-row w-full bg-white 
+          ${status === "green" && "text-green-600 rounded-bl-md"}
+          ${status === "gray" && "text-vsvGray"}
+          ${status === "red" && "text-red-600 rounded-br-md"}`}
+        >
+          {status === "green" && <ThumbsUp />}
+          {status === "gray" && <CircleHelp />}
+          {status === "red" && <ThumbsDown />}
+          {participants && (
+            <span className="ml-2">{participants <= 0 ? 0 : participants}</span>
+          )}
+        </button>
+      </div>
       {modal && (
         <QuestionPage
           closeModal={() => setModal(false)}
@@ -36,6 +49,7 @@ export const EventButton = ({ status, event }: EventButtonProps) => {
           title={event.attributes.title}
           eventId={event.id.toString()}
           layout={"dark"}
+          confirmedUserUntilNow={confirmedUserUntilNow}
         />
       )}
     </>

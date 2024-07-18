@@ -1,5 +1,4 @@
 "use client";
-import { CircleHelp, ThumbsDown, ThumbsUp } from "lucide-react";
 import React, { useState } from "react";
 import { EventButton } from "./EventButton";
 import { EventDetails } from "./EventDetails";
@@ -8,7 +7,6 @@ import { EventType } from "@/types/event";
 import { format, parse } from "date-fns";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
-import { useSession } from "next-auth/react";
 
 type EventCardProps = {
   event: EventType;
@@ -16,8 +14,6 @@ type EventCardProps = {
 
 export const EventCard = ({ event }: EventCardProps) => {
   const [modal, setModal] = useState(false);
-  const { data: session, status } = useSession();
-
   const handleModalClose = () => {
     setModal(false);
   };
@@ -28,7 +24,6 @@ export const EventCard = ({ event }: EventCardProps) => {
   );
 
   let formattedEndTime = "";
-
   if (event.attributes.endTime) {
     const parsedTimeEnd = parse(
       event.attributes.endTime,
@@ -37,25 +32,12 @@ export const EventCard = ({ event }: EventCardProps) => {
     );
     formattedEndTime = format(parsedTimeEnd, "HH:mm");
   }
-
   const parsedTimeStart = parse(
     event.attributes.startTime,
     "HH:mm:ss.SSS",
     new Date()
   );
   const formattedStartTime = format(parsedTimeStart, "HH:mm");
-
-  console.log(event);
-
-  const confirmedParticipants = event.attributes.confirmed
-    ? event.attributes.confirmed.length
-    : 0;
-  const tentativeParticipants = event.attributes.tentative
-    ? event.attributes.tentative.length
-    : 0;
-  const cancelledParticipants = event.attributes.cancelled
-    ? event.attributes.cancelled.length
-    : 0;
 
   return (
     <div className="flex flex-col items-center justify-between">
@@ -73,55 +55,43 @@ export const EventCard = ({ event }: EventCardProps) => {
         <div className="flex flex-row bg-vsvGray rounded-lg">
           <EventButton
             status="green"
-            participant={confirmedParticipants}
-            date={formattedDate}
-            location={event.attributes.location}
-            title={event.attributes.title}
-            startTime={formattedStartTime}
-            endTime={formattedEndTime}
-            eventId={String(event.id)}
+            event={event}
+            participants={Number(event.attributes.zusage.data.length)}
+            confirmedUserUntilNow={
+              event.attributes.zusage && event.attributes.zusage.data
+            }
           />
           <hr className="w-0.5 h-16 border-t-0 border-gray-100" />
           <EventButton
             status="gray"
-            participant={tentativeParticipants}
-            date={formattedDate}
-            location={event.attributes.location}
-            title={event.attributes.title}
-            startTime={formattedStartTime}
-            endTime={formattedEndTime}
-            eventId={String(event.id)}
+            event={event}
+            participants={Number(event.attributes.unsicher.data.length)}
           />
           <hr className="w-0.5 h-16 border-t-0 border-gray-100" />
           <EventButton
             status="red"
-            participant={cancelledParticipants}
-            date={formattedDate}
-            location={event.attributes.location}
-            title={event.attributes.title}
-            startTime={formattedStartTime}
-            endTime={formattedEndTime}
-            eventId={String(event.id)}
+            event={event}
+            participants={Number(event.attributes.absage.data.length)}
           />
         </div>
-        {session?.user.isAdmin && (
-          <div className="flex gap-2 items-center justify-between m-2">
-            <div className="flex flex-row gap-3 items-center m-2">
-              <DeleteButton eventId={String(event.id)} />
-              <span>löschen</span>
-            </div>
-            <div className="flex flex-row gap-3 items-center m-2">
-              <span>bearbeiten</span>
-              <EditButton event={event} />
-            </div>
+        <div className="flex gap-2 items-center justify-between m-2">
+          <div className="flex flex-row gap-3 items-center m-2">
+            <DeleteButton eventId={String(event.id)} />
+            <span>löschen</span>
           </div>
-        )}
+          <div className="flex flex-row gap-3 items-center m-2">
+            <span>bearbeiten</span>
+            <EditButton event={event} />
+          </div>
+        </div>
       </div>
-
       {modal && (
         <EventParticipants
           title={event.attributes.title}
           closeModal={handleModalClose}
+          ConfirmedParticipant={event.attributes.zusage.data}
+          TentativeParticipant={event.attributes.unsicher.data}
+          CancelledParticipant={event.attributes.absage.data}
         />
       )}
     </div>

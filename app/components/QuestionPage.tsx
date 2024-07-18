@@ -3,11 +3,16 @@ import React from "react";
 import { useSession } from "next-auth/react";
 import axiosInstance from "@/config/axios-config";
 import { EventDetails, EventDetailsProps } from "./EventDetails";
+import { useConfirmedUser } from "../hooks/useConfirmedUsers";
+import { useTentativeUser } from "../hooks/useTentativeUsers";
+import { useCancelledUser } from "../hooks/useCancelledUsers";
+import { ParticipantType } from "./ParticipantsDetails";
 
 type QuestionPageProps = EventDetailsProps & {
   closeModal: () => void;
   status: "green" | "gray" | "red";
   eventId: string;
+  confirmedUserUntilNow: ParticipantType[];
 };
 
 export const QuestionPage = ({
@@ -19,21 +24,23 @@ export const QuestionPage = ({
   location,
   title,
   eventId,
+  confirmedUserUntilNow,
 }: QuestionPageProps) => {
-  const { data: session } = useSession();
+  const { mutate: confirmUser } = useConfirmedUser();
+  const { mutate: tentativeUser } = useTentativeUser();
+  const { mutate: cancelledUser } = useCancelledUser();
 
-  const handleConfirm = async () => {
-    if (!session || !session.user) return;
-
-    try {
-      const response = await axiosInstance.put(`/events/${eventId}`, {
-        confirmed: [...(session.user.confirmed || []), session.user.id],
-      });
-      console.log("Event confirmed:", response.data);
-      closeModal();
-    } catch (error) {
-      console.error("Error confirming event:", error);
+  const handleClick = () => {
+    if (status === "green") {
+      confirmUser({ id: String(eventId), confirmedUserUntilNow });
     }
+    if (status === "gray") {
+      tentativeUser(String(eventId));
+    }
+    if (status === "red") {
+      cancelledUser(String(eventId));
+    }
+    closeModal();
   };
 
   return (
@@ -48,9 +55,9 @@ export const QuestionPage = ({
         {status === "green" && <ThumbsUp className="w-16 h-16" />}
         {status === "gray" && <CircleHelp className="w-16 h-16" />}
         {status === "red" && <ThumbsDown className="w-16 h-16" />}
-        {status === "green" && <p>Event zusagen</p>}
-        {status === "gray" && <p>Noch unsicher...</p>}
-        {status === "red" && <p>Event absagen</p>}
+        {status === "green" && <button>Event zusagen</button>}
+        {status === "gray" && <button>Noch unsicher...</button>}
+        {status === "red" && <button>Event absagen</button>}
       </div>
       <div className="flex flex-col w-full p-5 h-full justify-between">
         <EventDetails
@@ -63,16 +70,16 @@ export const QuestionPage = ({
         />
         <div className="flex flex-col gap-3 w-full">
           <button
+            onClick={handleClick}
             className={`text-xl w-full  border rounded-lg  p-4
         ${status === "green" && "bg-green-600"}
         ${status === "gray" && "bg-vsvGray"}
         ${status === "red" && "bg-red-600"}
         `}
-            onClick={handleConfirm}
           >
-            {status === "green" && <p>Event zusagen</p>}
-            {status === "gray" && <p>Teilnahme unsicher</p>}
-            {status === "red" && <p>Event absagen</p>}
+            {status === "green" && <span>Event zusagen</span>}
+            {status === "gray" && <span>Teilnahme unsicher</span>}
+            {status === "red" && <span>Event absagen</span>}
           </button>
           <button
             className="text-xl font-bold text-vsvGray w-full border-2 rounded-lg p-4 border-vsvGray"

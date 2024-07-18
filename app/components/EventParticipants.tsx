@@ -1,16 +1,24 @@
 import React from "react";
-import { ParticipantsDetails } from "./ParticipantsDetails";
+import { ParticipantsDetails, ParticipantType } from "./ParticipantsDetails";
 import { ScrollText } from "lucide-react";
+import { UserType } from "@/types/user";
 
 type EventParticipantsProps = {
   closeModal: () => void;
   title: string;
+  ConfirmedParticipant: ParticipantType[];
+  TentativeParticipant: ParticipantType[];
+  CancelledParticipant: ParticipantType[];
 };
 
 export const EventParticipants = ({
   closeModal,
   title,
+  ConfirmedParticipant,
+  TentativeParticipant,
+  CancelledParticipant,
 }: EventParticipantsProps) => {
+  console.log(ConfirmedParticipant);
   return (
     <div className="fixed top-0 left-0 h-screen w-full bg-gray-200 flex items-center z-50 flex-col justify-between">
       <div className="w-full h-52 items-center flex justify-center flex-col bg-vsvGray text-white">
@@ -25,9 +33,9 @@ export const EventParticipants = ({
       <div className="flex flex-col w-full p-5 h-full justify-between">
         <div>
           <ParticipantsDetails
-            ConfirmendParticipant={"David Gredler"}
-            TentativeParticipant={"Stone"}
-            CancelledParticipant={"Unte"}
+            ConfirmedParticipant={ConfirmedParticipant}
+            TentativeParticipant={TentativeParticipant}
+            CancelledParticipant={CancelledParticipant}
           />
         </div>
         <div className="flex flex-col gap-3 w-full">

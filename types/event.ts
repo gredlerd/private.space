@@ -1,3 +1,6 @@
+import { ParticipantType } from "@/app/components/ParticipantsDetails";
+import { UserType } from "./user";
+
 export type EventType = {
   id: string;
   attributes: {
@@ -9,9 +12,15 @@ export type EventType = {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
-    confirmed: number[];
-    tentative: number[];
-    cancelled: number[];
+    zusage: {
+      data: ParticipantType[];
+    };
+    unsicher: {
+      data: ParticipantType[];
+    };
+    absage: {
+      data: ParticipantType[];
+    };
   };
 };
 

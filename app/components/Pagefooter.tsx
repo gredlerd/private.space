@@ -28,7 +28,7 @@ export const Pagefooter = () => {
   };
 
   return (
-    <footer className="bg-gray-200 p-3 fixed bottom-0 w-full flex justify-between text-gray-400 text-xs">
+    <footer className="bg-gray-200 p-3 sticky bottom-0 w-full flex justify-between text-gray-400 text-xs">
       <button
         className="flex flex-col items-center ml-3"
         onClick={() => navigateTo("/dashboard")}

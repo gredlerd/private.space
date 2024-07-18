@@ -4,10 +4,10 @@ import { useQuery } from "react-query";
 
 export async function getAllUsers() {
   try {
-    const response = await axiosInstance.get(`/users?populate=*`);
+    const response = await axiosInstance.get(`/users`);
     return response.data as UserType[];
   } catch (error) {
-    console.error("Error fetching locations:", error);
+    console.error("Error fetching users:", error);
     throw new Error("Failed to fetch users");
   }
 }
