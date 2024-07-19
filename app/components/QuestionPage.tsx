@@ -7,12 +7,15 @@ import { useConfirmedUser } from "../hooks/useConfirmedUsers";
 import { useTentativeUser } from "../hooks/useTentativeUsers";
 import { useCancelledUser } from "../hooks/useCancelledUsers";
 import { ParticipantType } from "./ParticipantsDetails";
+import { useRemoveUserFromAllStates } from "../hooks/useRemoveUserFromAllStates";
 
 type QuestionPageProps = EventDetailsProps & {
   closeModal: () => void;
   status: "green" | "gray" | "red";
   eventId: string;
   confirmedUserUntilNow: ParticipantType[];
+  cancelledUserUntilNow: ParticipantType[];
+  tentativeUserUntilNow: ParticipantType[];
 };
 
 export const QuestionPage = ({
@@ -25,20 +28,30 @@ export const QuestionPage = ({
   title,
   eventId,
   confirmedUserUntilNow,
+  cancelledUserUntilNow,
+  tentativeUserUntilNow,
 }: QuestionPageProps) => {
   const { mutate: confirmUser } = useConfirmedUser();
   const { mutate: tentativeUser } = useTentativeUser();
   const { mutate: cancelledUser } = useCancelledUser();
+  const { mutate: removeUserFromAllStates } = useRemoveUserFromAllStates();
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    await removeUserFromAllStates({
+      id: String(eventId),
+      confirmedUserUntilNow,
+      tentativeUserUntilNow,
+      cancelledUserUntilNow,
+    });
+
     if (status === "green") {
       confirmUser({ id: String(eventId), confirmedUserUntilNow });
     }
     if (status === "gray") {
-      tentativeUser(String(eventId));
+      tentativeUser({ id: String(eventId), tentativeUserUntilNow });
     }
     if (status === "red") {
-      cancelledUser(String(eventId));
+      cancelledUser({ id: String(eventId), cancelledUserUntilNow });
     }
     closeModal();
   };

@@ -3,11 +3,10 @@ import axios from "axios";
 import { getSession } from "next-auth/react";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://192.168.68.198:1337/api",
+  baseURL: "http://192.168.178.69:1337/api",
   timeout: 3000,
 });
 
-// Function to set the auth token
 export const setAuthToken = async () => {
   const session = await getSession();
   if (session?.jwt) {
@@ -19,7 +18,6 @@ export const setAuthToken = async () => {
   }
 };
 
-// Call setAuthToken when your app initializes
 setAuthToken();
 
 export default axiosInstance;

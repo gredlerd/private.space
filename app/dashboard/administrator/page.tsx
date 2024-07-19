@@ -81,11 +81,14 @@ const CreateEvent = () => {
   return (
     <OverLayout>
       <div>
-        <div className="flex flex-col">
-          <PageHeadline title={"Admin Einstellungen"} />
-        </div>
-        <div className="flex justify-center items-center text-vsvGray font-bold text-2xl pb-4">
-          <span>Event erstellen</span>
+        <div className="flex gap-3 flex-col">
+          <div className="flex flex-col">
+            <PageHeadline title={"Admin"} />
+            <PageHeadline title={"Einstellungen"} />
+          </div>
+          <div className="flex justify-center items-center text-vsvGray font-bold text-2xl pb-4">
+            <span>Event erstellen</span>
+          </div>
         </div>
         <form
           className="flex justify-center items-center flex-col gap-2 text-vsvGray w-full"

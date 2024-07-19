@@ -9,6 +9,8 @@ export type EventDetailsProps = {
   endTime?: string;
   layout: "light" | "dark";
   confirmed?: string[];
+  tentative?: string[];
+  cancelled?: string[];
 };
 
 export const EventDetails = ({

@@ -33,7 +33,7 @@ export const ParticipantsDetails = ({
           <ThumbsUp className="text-green-600" />
         </div>
         <hr className="border-t-2 border-green-600 my-3 w-full" />
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col justify-start">
           {ConfirmedParticipant.map((el) => (
             <div key={el.id}>
               <span className="text-lg">
@@ -49,7 +49,7 @@ export const ParticipantsDetails = ({
           <CircleHelp className="text-vsvGray" />
         </div>
         <hr className="border-t-2 border-vsvGray my-3 w-full" />
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col justify-start">
           {TentativeParticipant.map((el) => (
             <div key={el.id}>
               <span className="text-lg">
@@ -65,7 +65,7 @@ export const ParticipantsDetails = ({
           <ThumbsDown className="text-red-600" />
         </div>
         <hr className="border-t-2 border-red-600 my-3 w-full" />
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col justify-start">
           {CancelledParticipant.map((el) => (
             <div key={el.id}>
               <span className="text-lg">

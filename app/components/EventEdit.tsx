@@ -84,14 +84,17 @@ export const EventEdit = ({ closeModal, event }: EventEditProps) => {
   return (
     <div className="fixed top-0 left-0 h-screen w-full bg-vsvGrayLight flex items-center z-50 flex-col justify-between">
       <div className="pt-10 w-full p-5">
-        <div className="flex flex-col">
-          <PageHeadline title={"Admin Einstellungen"} />
-        </div>
-        <div className="flex justify-center items-center text-vsvGray font-bold text-2xl pb-4 gap-3">
-          <span>Event bearbeiten</span>
-          <span>
-            <Pencil />
-          </span>
+        <div className="flex gap-3 flex-col">
+          <div className="flex flex-col">
+            <PageHeadline title={"Admin"} />
+            <PageHeadline title={"Einstellungen"} />
+          </div>
+          <div className="flex justify-center items-center text-vsvGray font-bold text-2xl pb-4 gap-2">
+            <span>Event bearbeiten</span>
+            <span>
+              <Pencil />
+            </span>
+          </div>
         </div>
         <div>
           <form

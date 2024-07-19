@@ -10,6 +10,8 @@ type EventButtonProps = {
   event: EventType;
   participants?: number;
   confirmedUserUntilNow?: ParticipantType[];
+  cancelledUserUntilNow?: ParticipantType[];
+  tentativeUserUntilNow?: ParticipantType[];
 };
 
 export const EventButton = ({
@@ -17,6 +19,8 @@ export const EventButton = ({
   event,
   participants,
   confirmedUserUntilNow,
+  cancelledUserUntilNow,
+  tentativeUserUntilNow,
 }: EventButtonProps) => {
   const [modal, setModal] = useState(false);
 
@@ -25,7 +29,7 @@ export const EventButton = ({
       <div className="flex flex-col items-center w-full">
         <button
           onClick={() => setModal(true)}
-          className={`gap-2 py-4 font-bold items-center text-xl flex justify-center flex-row w-full bg-white 
+          className={`gap-2 py-5 font-bold items-center text-xl flex justify-center flex-row w-full bg-white 
           ${status === "green" && "text-green-600 rounded-bl-md"}
           ${status === "gray" && "text-vsvGray"}
           ${status === "red" && "text-red-600 rounded-br-md"}`}
@@ -50,6 +54,8 @@ export const EventButton = ({
           eventId={event.id.toString()}
           layout={"dark"}
           confirmedUserUntilNow={confirmedUserUntilNow}
+          cancelledUserUntilNow={cancelledUserUntilNow}
+          tentativeUserUntilNow={tentativeUserUntilNow}
         />
       )}
     </>

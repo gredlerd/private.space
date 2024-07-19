@@ -7,6 +7,7 @@ import { EventType } from "@/types/event";
 import { format, parse } from "date-fns";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
+import { useSession } from "next-auth/react";
 
 type EventCardProps = {
   event: EventType;
@@ -14,6 +15,7 @@ type EventCardProps = {
 
 export const EventCard = ({ event }: EventCardProps) => {
   const [modal, setModal] = useState(false);
+  const { data: session, status } = useSession();
   const handleModalClose = () => {
     setModal(false);
   };
@@ -41,7 +43,7 @@ export const EventCard = ({ event }: EventCardProps) => {
 
   return (
     <div className="flex flex-col items-center justify-between">
-      <div className="flex w-full flex-col shadow-lg m-10 rounded-lg bg-vsvGray text-white">
+      <div className="flex w-full flex-col shadow-lg rounded-lg bg-vsvGray text-white">
         <div className="relative p-4" onClick={() => setModal(true)}>
           <EventDetails
             date={formattedDate}
@@ -66,24 +68,32 @@ export const EventCard = ({ event }: EventCardProps) => {
             status="gray"
             event={event}
             participants={Number(event.attributes.unsicher.data.length)}
+            tentativeUserUntilNow={
+              event.attributes.unsicher && event.attributes.unsicher.data
+            }
           />
           <hr className="w-0.5 h-16 border-t-0 border-gray-100" />
           <EventButton
             status="red"
             event={event}
             participants={Number(event.attributes.absage.data.length)}
+            cancelledUserUntilNow={
+              event.attributes.absage && event.attributes.absage.data
+            }
           />
         </div>
-        <div className="flex gap-2 items-center justify-between m-2">
-          <div className="flex flex-row gap-3 items-center m-2">
-            <DeleteButton eventId={String(event.id)} />
-            <span>löschen</span>
+        {session?.user.isAdmin && (
+          <div className="flex gap-2 items-center justify-between m-2">
+            <div className="flex flex-row gap-3 items-center m-2">
+              <DeleteButton eventId={String(event.id)} />
+              <span>löschen</span>
+            </div>
+            <div className="flex flex-row gap-3 items-center m-2">
+              <span>bearbeiten</span>
+              <EditButton event={event} />
+            </div>
           </div>
-          <div className="flex flex-row gap-3 items-center m-2">
-            <span>bearbeiten</span>
-            <EditButton event={event} />
-          </div>
-        </div>
+        )}
       </div>
       {modal && (
         <EventParticipants
