@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { EventButton } from "./EventButton";
 import { EventDetails } from "./EventDetails";
 import { EventParticipants } from "./EventParticipants";
@@ -8,14 +8,30 @@ import { format, parse } from "date-fns";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
 import { useSession } from "next-auth/react";
+import { Clock } from "lucide-react";
 
 type EventCardProps = {
   event: EventType;
 };
 
+const isWithin4Hours = (event: EventType): boolean => {
+  const eventDate = new Date(event.attributes.eventDate);
+  const startTimeParts = event.attributes.startTime.split(":");
+  eventDate.setHours(parseInt(startTimeParts[0], 10));
+  eventDate.setMinutes(parseInt(startTimeParts[1], 10));
+
+  const now = new Date();
+  const timeDiff = eventDate.getTime() - now.getTime();
+  const hoursLeft = Math.floor(timeDiff / (1000 * 60 * 60));
+
+  return hoursLeft <= 4;
+};
+
 export const EventCard = ({ event }: EventCardProps) => {
   const [modal, setModal] = useState(false);
+  const [isPastDeadline, setIsPastDeadline] = useState(false);
   const { data: session, status } = useSession();
+
   const handleModalClose = () => {
     setModal(false);
   };
@@ -34,12 +50,24 @@ export const EventCard = ({ event }: EventCardProps) => {
     );
     formattedEndTime = format(parsedTimeEnd, "HH:mm");
   }
+
   const parsedTimeStart = parse(
     event.attributes.startTime,
     "HH:mm:ss.SSS",
     new Date()
   );
   const formattedStartTime = format(parsedTimeStart, "HH:mm");
+
+  useEffect(() => {
+    const checkDeadline = () => {
+      setIsPastDeadline(isWithin4Hours(event));
+    };
+
+    checkDeadline();
+    const intervalId = setInterval(checkDeadline, 1000 * 60);
+
+    return () => clearInterval(intervalId);
+  }, [event]);
 
   return (
     <div className="flex flex-col items-center justify-between">
@@ -62,26 +90,52 @@ export const EventCard = ({ event }: EventCardProps) => {
             confirmedUserUntilNow={
               event.attributes.zusage && event.attributes.zusage.data
             }
+            tentativeUserUntilNow={
+              event.attributes.unsicher && event.attributes.unsicher.data
+            }
+            cancelledUserUntilNow={
+              event.attributes.absage && event.attributes.absage.data
+            }
+            disabled={isPastDeadline}
           />
           <hr className="w-0.5 h-16 border-t-0 border-gray-100" />
           <EventButton
             status="gray"
             event={event}
             participants={Number(event.attributes.unsicher.data.length)}
+            confirmedUserUntilNow={
+              event.attributes.zusage && event.attributes.zusage.data
+            }
             tentativeUserUntilNow={
               event.attributes.unsicher && event.attributes.unsicher.data
             }
+            cancelledUserUntilNow={
+              event.attributes.absage && event.attributes.absage.data
+            }
+            disabled={isPastDeadline}
           />
           <hr className="w-0.5 h-16 border-t-0 border-gray-100" />
           <EventButton
             status="red"
             event={event}
             participants={Number(event.attributes.absage.data.length)}
+            confirmedUserUntilNow={
+              event.attributes.zusage && event.attributes.zusage.data
+            }
+            tentativeUserUntilNow={
+              event.attributes.unsicher && event.attributes.unsicher.data
+            }
             cancelledUserUntilNow={
               event.attributes.absage && event.attributes.absage.data
             }
+            disabled={isPastDeadline}
           />
         </div>
+        {isPastDeadline && (
+          <div className="text-center text-red-600 mt-2">
+            Zeit zum Zu-/Absagen abgelaufen
+          </div>
+        )}
         {session?.user.isAdmin && (
           <div className="flex gap-2 items-center justify-between m-2">
             <div className="flex flex-row gap-3 items-center m-2">

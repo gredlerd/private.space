@@ -27,33 +27,61 @@ export const QuestionPage = ({
   location,
   title,
   eventId,
-  confirmedUserUntilNow,
-  cancelledUserUntilNow,
-  tentativeUserUntilNow,
+  confirmedUserUntilNow = [], // Fallback auf leere Arrays
+  cancelledUserUntilNow = [],
+  tentativeUserUntilNow = [],
 }: QuestionPageProps) => {
   const { mutate: confirmUser } = useConfirmedUser();
   const { mutate: tentativeUser } = useTentativeUser();
   const { mutate: cancelledUser } = useCancelledUser();
   const { mutate: removeUserFromAllStates } = useRemoveUserFromAllStates();
+  const { data: session } = useSession();
 
   const handleClick = async () => {
-    await removeUserFromAllStates({
-      id: String(eventId),
-      confirmedUserUntilNow,
-      tentativeUserUntilNow,
-      cancelledUserUntilNow,
-    });
-
-    if (status === "green") {
-      confirmUser({ id: String(eventId), confirmedUserUntilNow });
+    try {
+      if (status === "green") {
+        if (
+          !confirmedUserUntilNow.some((user) => user.id === session?.user.id)
+        ) {
+          await removeUserFromAllStates({
+            id: String(eventId),
+            confirmedUserUntilNow: confirmedUserUntilNow || [],
+            tentativeUserUntilNow: tentativeUserUntilNow || [],
+            cancelledUserUntilNow: cancelledUserUntilNow || [],
+          });
+          await confirmUser({ id: String(eventId), confirmedUserUntilNow });
+        }
+      }
+      if (status === "gray") {
+        if (
+          !tentativeUserUntilNow.some((user) => user.id === session?.user.id)
+        ) {
+          await removeUserFromAllStates({
+            id: String(eventId),
+            confirmedUserUntilNow: confirmedUserUntilNow || [],
+            tentativeUserUntilNow: tentativeUserUntilNow || [],
+            cancelledUserUntilNow: cancelledUserUntilNow || [],
+          });
+          await tentativeUser({ id: String(eventId), tentativeUserUntilNow });
+        }
+      }
+      if (status === "red") {
+        if (
+          !cancelledUserUntilNow.some((user) => user.id === session?.user.id)
+        ) {
+          await removeUserFromAllStates({
+            id: String(eventId),
+            confirmedUserUntilNow: confirmedUserUntilNow || [],
+            tentativeUserUntilNow: tentativeUserUntilNow || [],
+            cancelledUserUntilNow: cancelledUserUntilNow || [],
+          });
+          await cancelledUser({ id: String(eventId), cancelledUserUntilNow });
+        }
+      }
+      closeModal();
+    } catch (error) {
+      console.error("Error handling click:", error);
     }
-    if (status === "gray") {
-      tentativeUser({ id: String(eventId), tentativeUserUntilNow });
-    }
-    if (status === "red") {
-      cancelledUser({ id: String(eventId), cancelledUserUntilNow });
-    }
-    closeModal();
   };
 
   return (

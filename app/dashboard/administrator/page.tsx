@@ -1,22 +1,19 @@
 "use client";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { PageHeadline } from "../../components/PageHeadline";
 import OverLayout from "../../components/OverLayout/overLayout";
-import { RegisterData, useNewEvent } from "../../hooks/useNewEvent";
-import { useDeleteEvent, DeleteEventData } from "../../hooks/useDeleteEvents";
-import { NewEventType } from "@/types/newEvent";
+import { useNewEvent } from "../../hooks/useNewEvent";
 import { format } from "date-fns";
 
 interface EventInputs {
   title: string;
-  eventDate: Date;
+  eventDate: string;
   startTime: string;
   location: string;
-  endTime: string;
+  endTime?: string;
 }
 
 const schema = yup.object().shape({
@@ -42,39 +39,36 @@ const CreateEvent = () => {
 
   const onSubmit: SubmitHandler<EventInputs> = async (dataInput) => {
     setSubmissionError(false);
-    console.log(dataInput);
 
-    if (dataInput.endTime !== "") {
-      mutate({
-        data: {
-          location: dataInput.location,
-          startTime: String(
-            format(
-              new Date(`1970-01-01T${dataInput.startTime}`),
-              "HH:mm:ss.SSS"
-            )
-          ),
-          eventDate: dataInput.eventDate,
-          title: dataInput.title,
-          endTime: String(
-            format(new Date(`1970-01-01T${dataInput.endTime}`), "HH:mm:ss.SSS")
-          ),
-        },
-      });
+    const eventDateTime = new Date(
+      `${dataInput.eventDate}T${dataInput.startTime}`
+    );
+
+    let formattedData;
+    if (dataInput.endTime) {
+      const endDateTime = new Date(
+        `${dataInput.eventDate}T${dataInput.endTime}`
+      );
+      formattedData = {
+        title: dataInput.title,
+        eventDate: eventDateTime,
+        startTime: format(eventDateTime, "HH:mm:ss.SSS"),
+        endTime: format(endDateTime, "HH:mm:ss.SSS"),
+        location: dataInput.location,
+      };
     } else {
-      mutate({
-        data: {
-          location: dataInput.location,
-          startTime: String(
-            format(
-              new Date(`1970-01-01T${dataInput.startTime}`),
-              "HH:mm:ss.SSS"
-            )
-          ),
-          eventDate: dataInput.eventDate,
-          title: dataInput.title,
-        },
-      });
+      formattedData = {
+        title: dataInput.title,
+        eventDate: eventDateTime,
+        startTime: format(eventDateTime, "HH:mm:ss.SSS"),
+        location: dataInput.location,
+      };
+    }
+
+    try {
+      mutate({ data: formattedData });
+    } catch (error) {
+      setSubmissionError(true);
     }
   };
 

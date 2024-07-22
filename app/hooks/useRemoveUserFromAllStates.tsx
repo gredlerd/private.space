@@ -11,19 +11,26 @@ export async function removeUserFromAllStates(
   cancelledUserUntilNow: ParticipantType[]
 ) {
   try {
-    const confirmedUserIds = confirmedUserUntilNow.map((el) => String(el.id));
-    const tentativeUserIds = tentativeUserUntilNow.map((el) => String(el.id));
-    const cancelledUserIds = cancelledUserUntilNow.map((el) => String(el.id));
+    const confirmedUserIds =
+      confirmedUserUntilNow?.map((el) => String(el.id)) || [];
+    const tentativeUserIds =
+      tentativeUserUntilNow?.map((el) => String(el.id)) || [];
+    const cancelledUserIds =
+      cancelledUserUntilNow?.map((el) => String(el.id)) || [];
+
+    const confirmed = confirmedUserIds.filter((el) => el !== userID);
+    const tentative = tentativeUserIds.filter((el) => el !== userID);
+    const canceled = cancelledUserIds.filter((el) => el !== userID);
 
     const response = await axiosInstance.put(`/events/${id}`, {
       data: {
-        zusage: confirmedUserIds.filter((el) => el !== userID),
-        unsicher: tentativeUserIds.filter((el) => el !== userID),
-        absage: cancelledUserIds.filter((el) => el !== userID),
+        zusage: confirmed,
+        unsicher: tentative,
+        absage: canceled,
       },
     });
 
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error removing user from all states:", error);
     throw new Error("Failed to remove user from all states");
@@ -49,9 +56,9 @@ export const useRemoveUserFromAllStates = () => {
       removeUserFromAllStates(
         id,
         String(session?.user.id),
-        confirmedUserUntilNow,
-        tentativeUserUntilNow,
-        cancelledUserUntilNow
+        confirmedUserUntilNow || [],
+        tentativeUserUntilNow || [],
+        cancelledUserUntilNow || []
       ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["allEvents"] });
