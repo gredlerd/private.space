@@ -1,7 +1,10 @@
-import { CircleHelp, ThumbsDown, ThumbsUp } from "lucide-react";
+import { CircleHelp, CircleOff, ThumbsDown, ThumbsUp } from "lucide-react";
 import React from "react";
 import { EventButton } from "./EventButton";
 import { UserType } from "@/types/user";
+import { useSession } from "next-auth/react";
+import UserList from "./UserList";
+import { useGetAllUsers } from "../hooks/useGetAllUsers";
 
 export type ParticipantType = {
   id: number;
@@ -25,6 +28,9 @@ export const ParticipantsDetails = ({
   TentativeParticipant,
   CancelledParticipant,
 }: ParticipantsDetailsProps) => {
+  const { data: session, status } = useSession();
+  const { data } = useGetAllUsers();
+
   return (
     <section className="flex flex-col gap-4">
       <div>
@@ -75,6 +81,24 @@ export const ParticipantsDetails = ({
           ))}
         </div>
       </div>
+      {session?.user.isAdmin && (
+        <div>
+          <div className="flex items-center justify-between pt-5">
+            <span className="font-bold text-xl">Noch nicht zu/abgesagt</span>
+            <CircleOff className="" />
+          </div>
+          <hr className="border-t-2 border-black my-3 w-full" />
+          <div className="flex flex-col justify-start">
+            {data && (
+              <>
+                {data.map((user: UserType) => (
+                  <UserList key={user.id} user={user} />
+                ))}
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 };

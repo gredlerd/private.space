@@ -26,7 +26,6 @@ export async function confirmedUserById(
 
 export const useConfirmedUser = () => {
   const queryClient = useQueryClient();
-  const router = useRouter();
   const { data: session, status } = useSession();
 
   return useMutation({
