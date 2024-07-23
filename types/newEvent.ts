@@ -9,7 +9,7 @@ export type EventArray = {
 
 export type EventTypeInput = {
   title: string;
-  eventDate: Date;
+  eventDate: string;
   startTime: string;
   endTime?: string;
   location: string;

@@ -8,6 +8,7 @@ import { useTentativeUser } from "../hooks/useTentativeUsers";
 import { useCancelledUser } from "../hooks/useCancelledUsers";
 import { ParticipantType } from "./ParticipantsDetails";
 import { useRemoveUserFromAllStates } from "../hooks/useRemoveUserFromAllStates";
+import { format, parse } from "date-fns";
 
 type QuestionPageProps = EventDetailsProps & {
   closeModal: () => void;
@@ -27,7 +28,7 @@ export const QuestionPage = ({
   location,
   title,
   eventId,
-  confirmedUserUntilNow = [], // Fallback auf leere Arrays
+  confirmedUserUntilNow = [],
   cancelledUserUntilNow = [],
   tentativeUserUntilNow = [],
 }: QuestionPageProps) => {
@@ -36,6 +37,17 @@ export const QuestionPage = ({
   const { mutate: cancelledUser } = useCancelledUser();
   const { mutate: removeUserFromAllStates } = useRemoveUserFromAllStates();
   const { data: session } = useSession();
+
+  const formattedDate = format(new Date(date), "dd.MM.yyyy");
+
+  let formattedEndTime = "";
+  if (endTime) {
+    const parsedTimeEnd = parse(endTime, "HH:mm:ss.SSS", new Date());
+    formattedEndTime = format(parsedTimeEnd, "HH:mm");
+  }
+
+  const parsedTimeStart = parse(startTime, "HH:mm:ss.SSS", new Date());
+  const formattedStartTime = format(parsedTimeStart, "HH:mm");
 
   const handleClick = async () => {
     try {
@@ -102,9 +114,9 @@ export const QuestionPage = ({
       </div>
       <div className="flex flex-col w-full p-5 h-full justify-between">
         <EventDetails
-          date={date}
-          startTime={startTime}
-          endTime={endTime}
+          date={formattedDate}
+          startTime={formattedStartTime}
+          endTime={formattedEndTime}
           title={title}
           location={location}
           layout={"dark"}

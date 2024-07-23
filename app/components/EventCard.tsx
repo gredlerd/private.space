@@ -8,29 +8,25 @@ import { format, parse } from "date-fns";
 import { DeleteButton } from "./DeleteButton";
 import { EditButton } from "./EditButton";
 import { useSession } from "next-auth/react";
-import { Clock } from "lucide-react";
 
 type EventCardProps = {
   event: EventType;
 };
 
-const isWithin4Hours = (event: EventType): boolean => {
+const isPastDeadline = (event: EventType): boolean => {
   const eventDate = new Date(event.attributes.eventDate);
   const startTimeParts = event.attributes.startTime.split(":");
   eventDate.setHours(parseInt(startTimeParts[0], 10));
   eventDate.setMinutes(parseInt(startTimeParts[1], 10));
 
   const now = new Date();
-  const timeDiff = eventDate.getTime() - now.getTime();
-  const hoursLeft = Math.floor(timeDiff / (1000 * 60 * 60));
-
-  return hoursLeft <= 4;
+  return now > eventDate;
 };
 
 export const EventCard = ({ event }: EventCardProps) => {
   const [modal, setModal] = useState(false);
-  const [isPastDeadline, setIsPastDeadline] = useState(false);
-  const { data: session, status } = useSession();
+  const [isDeadlinePassed, setIsDeadlinePassed] = useState(false);
+  const { data: session } = useSession();
 
   const handleModalClose = () => {
     setModal(false);
@@ -60,14 +56,18 @@ export const EventCard = ({ event }: EventCardProps) => {
 
   useEffect(() => {
     const checkDeadline = () => {
-      setIsPastDeadline(isWithin4Hours(event));
+      if (!session?.user.isAdmin) {
+        setIsDeadlinePassed(isPastDeadline(event));
+      } else {
+        setIsDeadlinePassed(false);
+      }
     };
 
     checkDeadline();
     const intervalId = setInterval(checkDeadline, 1000 * 60);
 
     return () => clearInterval(intervalId);
-  }, [event]);
+  }, [event, session?.user.isAdmin]);
 
   return (
     <div className="flex flex-col items-center justify-between">
@@ -96,7 +96,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             cancelledUserUntilNow={
               event.attributes.absage && event.attributes.absage.data
             }
-            disabled={isPastDeadline}
+            disabled={isDeadlinePassed}
           />
           <hr className="w-0.5 h-16 border-t-0 border-gray-100" />
           <EventButton
@@ -112,7 +112,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             cancelledUserUntilNow={
               event.attributes.absage && event.attributes.absage.data
             }
-            disabled={isPastDeadline}
+            disabled={isDeadlinePassed}
           />
           <hr className="w-0.5 h-16 border-t-0 border-gray-100" />
           <EventButton
@@ -128,12 +128,12 @@ export const EventCard = ({ event }: EventCardProps) => {
             cancelledUserUntilNow={
               event.attributes.absage && event.attributes.absage.data
             }
-            disabled={isPastDeadline}
+            disabled={isDeadlinePassed}
           />
         </div>
-        {isPastDeadline && (
-          <div className="text-center text-red-600 mt-2">
-            Zeit zum Zu-/Absagen abgelaufen
+        {isDeadlinePassed && (
+          <div className="text-center text-white mt-2 bg-red-600">
+            Zeit zum Zu-/Absagen abgelaufen!
           </div>
         )}
         {session?.user.isAdmin && (

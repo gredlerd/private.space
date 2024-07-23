@@ -1,5 +1,6 @@
 "use client";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -13,7 +14,7 @@ interface EventInputs {
   eventDate: string;
   startTime: string;
   location: string;
-  endTime?: string;
+  endTime: string;
 }
 
 const schema = yup.object().shape({
@@ -36,38 +37,37 @@ const CreateEvent = () => {
 
   const [submissionError, setSubmissionError] = useState(false);
   const { mutate } = useNewEvent();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<EventInputs> = async (dataInput) => {
     setSubmissionError(false);
+    console.log(dataInput);
 
-    const eventDateTime = new Date(
-      `${dataInput.eventDate}T${dataInput.startTime}`
+    const startTimeFormatted = String(
+      format(new Date(`1970-01-01T${dataInput.startTime}`), "HH:mm:ss.SSS")
     );
 
-    let formattedData;
-    if (dataInput.endTime) {
-      const endDateTime = new Date(
-        `${dataInput.eventDate}T${dataInput.endTime}`
-      );
-      formattedData = {
-        title: dataInput.title,
-        eventDate: eventDateTime,
-        startTime: format(eventDateTime, "HH:mm:ss.SSS"),
-        endTime: format(endDateTime, "HH:mm:ss.SSS"),
-        location: dataInput.location,
-      };
-    } else {
-      formattedData = {
-        title: dataInput.title,
-        eventDate: eventDateTime,
-        startTime: format(eventDateTime, "HH:mm:ss.SSS"),
-        location: dataInput.location,
-      };
-    }
+    const endTimeFormatted = dataInput.endTime
+      ? String(
+          format(new Date(`1970-01-01T${dataInput.endTime}`), "HH:mm:ss.SSS")
+        )
+      : undefined;
+
+    const eventData = {
+      data: {
+        ...dataInput,
+        eventDate: format(dataInput.eventDate, "yyyy-MM-dd"),
+        endTime: endTimeFormatted,
+        startTime: startTimeFormatted,
+      },
+    };
 
     try {
-      mutate({ data: formattedData });
+      console.log(eventData);
+      await mutate(eventData);
+      router.push("/dashboard");
     } catch (error) {
+      console.error(error);
       setSubmissionError(true);
     }
   };

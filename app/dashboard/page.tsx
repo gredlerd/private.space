@@ -7,24 +7,48 @@ import { TimeUntilNextEvent } from "../components/TimeUntilNextEvent";
 import { useEffect, useState } from "react";
 import { UseSession } from "../components/UseSession";
 import { useSession } from "next-auth/react";
+import { parseISO, format } from "date-fns";
 
 export default function Home() {
   const { data: allEvents, isLoading, isError } = useGetAllEvents();
   const [nextEvent, setNextEvent] = useState<EventType | null>(null);
+  const [upcomingEvents, setUpcomingEvents] = useState<EventType[]>([]);
 
   useEffect(() => {
     console.log("All Events:", allEvents);
-    const newTime = new Date();
 
     if (allEvents && allEvents.data.length > 0) {
-      const upcomingEvents = allEvents.data.filter(
-        (event) => new Date(event.attributes.eventDate) > new Date()
-      );
-      if (upcomingEvents.length > 0) {
-        setNextEvent(upcomingEvents[0]);
+      const now = new Date();
+
+      const filteredAndSortedEvents = allEvents.data
+        .filter((event) => {
+          const eventDateTime = parseISO(
+            `${event.attributes.eventDate}T${event.attributes.startTime}`
+          );
+          return eventDateTime >= now;
+        })
+        .sort((a, b) => {
+          const dateA = parseISO(
+            `${a.attributes.eventDate}T${a.attributes.startTime}`
+          );
+          const dateB = parseISO(
+            `${b.attributes.eventDate}T${b.attributes.startTime}`
+          );
+          return dateA.getTime() - dateB.getTime();
+        });
+
+      console.log("Filtered and sorted events:", filteredAndSortedEvents);
+
+      setUpcomingEvents(filteredAndSortedEvents);
+
+      if (filteredAndSortedEvents.length > 0) {
+        setNextEvent(filteredAndSortedEvents[0]);
       } else {
         setNextEvent(null);
       }
+    } else {
+      setUpcomingEvents([]);
+      setNextEvent(null);
     }
   }, [allEvents]);
 
@@ -36,19 +60,17 @@ export default function Home() {
         {isLoading && <p>Loading...</p>}
         {isError && <p>Error loading events.</p>}
         {nextEvent ? (
-          <TimeUntilNextEvent nextEvent={nextEvent} />
+          <>
+            <TimeUntilNextEvent nextEvent={nextEvent} />
+          </>
         ) : (
           <p>Keine bevorstehenden Events gefunden.</p>
         )}
       </div>
       <div className="flex flex-col gap-6">
-        {allEvents && (
-          <>
-            {allEvents.data.map((event: EventType) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </>
-        )}
+        {upcomingEvents.map((event: EventType) => (
+          <EventCard key={event.id} event={event} />
+        ))}
       </div>
     </main>
   );
