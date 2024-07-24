@@ -17,9 +17,17 @@ interface Inputs {
   confirmPassword: string;
 }
 
+const nameRegex = /^[A-Z][a-z]*$/;
+
 const schema = yup.object().shape({
-  firstname: yup.string().required("Vorname ist erforderlich."),
-  lastname: yup.string().required("Nachname ist erforderlich."),
+  firstname: yup
+    .string()
+    .matches(nameRegex, "Der Vorname muss mit einem Großbuchstaben beginnen.")
+    .required("Vorname ist erforderlich."),
+  lastname: yup
+    .string()
+    .matches(nameRegex, "Der Nachname muss mit einem Großbuchstaben beginnen.")
+    .required("Nachname ist erforderlich."),
   birthdate: yup
     .date()
     .required("Geburtsdatum ist erforderlich.")
@@ -44,6 +52,7 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
+    //@ts-ignore
     resolver: yupResolver(schema),
   });
 

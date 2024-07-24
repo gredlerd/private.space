@@ -5,7 +5,6 @@ import { useQuery } from "react-query";
 export async function getAllEvents() {
   try {
     const response = await axiosInstance.get(`/events?populate=*`);
-    console.log(response);
     return response.data as EventArray;
   } catch (error) {
     console.error("Error fetching locations:", error);

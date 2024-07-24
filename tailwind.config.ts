@@ -13,6 +13,7 @@ const config: Config = {
         vsvBlueLight: "#008CFF",
         vsvGray: "#959596",
         vsvGrayLight: "#F8F8F8",
+        marketingGold: "#DAA520",
       },
     },
   },

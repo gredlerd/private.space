@@ -41,7 +41,6 @@ const CreateEvent = () => {
 
   const onSubmit: SubmitHandler<EventInputs> = async (dataInput) => {
     setSubmissionError(false);
-    console.log(dataInput);
 
     const startTimeFormatted = String(
       format(new Date(`1970-01-01T${dataInput.startTime}`), "HH:mm:ss.SSS")
@@ -63,7 +62,6 @@ const CreateEvent = () => {
     };
 
     try {
-      console.log(eventData);
       await mutate(eventData);
       router.push("/dashboard");
     } catch (error) {
@@ -80,7 +78,7 @@ const CreateEvent = () => {
             <PageHeadline title={"Admin"} />
             <PageHeadline title={"Einstellungen"} />
           </div>
-          <div className="flex justify-center items-center text-vsvGray font-bold text-2xl pb-4">
+          <div className="flex justify-center items-center font-bold text-2xl pb-4">
             <span>Event erstellen</span>
           </div>
         </div>

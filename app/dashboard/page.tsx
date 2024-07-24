@@ -15,8 +15,6 @@ export default function Home() {
   const [upcomingEvents, setUpcomingEvents] = useState<EventType[]>([]);
 
   useEffect(() => {
-    console.log("All Events:", allEvents);
-
     if (allEvents && allEvents.data.length > 0) {
       const now = new Date();
 
@@ -36,8 +34,6 @@ export default function Home() {
           );
           return dateA.getTime() - dateB.getTime();
         });
-
-      console.log("Filtered and sorted events:", filteredAndSortedEvents);
 
       setUpcomingEvents(filteredAndSortedEvents);
 

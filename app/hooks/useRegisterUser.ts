@@ -15,7 +15,6 @@ interface RegisterData {
 export async function addNewUser(data: RegisterData) {
   try {
     const response = await axiosInstance.post("/auth/local/register", data);
-    console.log(response);
     return response.data;
   } catch (error) {
     throw new Error("fehler beim adden eines users");

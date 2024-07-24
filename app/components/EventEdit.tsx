@@ -53,7 +53,6 @@ export const EventEdit = ({ closeModal, event }: EventEditProps) => {
   const { mutate: updateEvent } = useUpdateEvent();
 
   const onSubmit: SubmitHandler<EventInputs> = (data) => {
-    console.log(data);
     let formattedData;
     if (data.endTime != "") {
       formattedData = {
@@ -75,7 +74,6 @@ export const EventEdit = ({ closeModal, event }: EventEditProps) => {
       };
     }
 
-    console.log();
     //@ts-ignore
     updateEvent(formattedData);
     closeModal();
@@ -89,7 +87,7 @@ export const EventEdit = ({ closeModal, event }: EventEditProps) => {
             <PageHeadline title={"Admin"} />
             <PageHeadline title={"Einstellungen"} />
           </div>
-          <div className="flex justify-center items-center text-vsvGray font-bold text-2xl pb-4 gap-2">
+          <div className="flex justify-center items-center text-black font-bold text-2xl pb-4 gap-2">
             <span>Event bearbeiten</span>
             <span>
               <Pencil />

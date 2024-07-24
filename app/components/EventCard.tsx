@@ -95,7 +95,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             cancelledUserUntilNow={
               event.attributes.absage && event.attributes.absage.data
             }
-            disabled={false}
+            disabled={isPastDeadline && !session?.user.isAdmin}
           />
           <hr className="w-0.5 h-16 border-t-0 border-gray-100" />
           <EventButton
@@ -111,7 +111,7 @@ export const EventCard = ({ event }: EventCardProps) => {
             cancelledUserUntilNow={
               event.attributes.absage && event.attributes.absage.data
             }
-            disabled={false}
+            disabled={isPastDeadline && !session?.user.isAdmin}
           />
           <hr className="w-0.5 h-16 border-t-0 border-gray-100" />
           <EventButton
@@ -127,11 +127,11 @@ export const EventCard = ({ event }: EventCardProps) => {
             cancelledUserUntilNow={
               event.attributes.absage && event.attributes.absage.data
             }
-            disabled={false}
+            disabled={isPastDeadline && !session?.user.isAdmin}
           />
         </div>
         {isPastDeadline && !session?.user.isAdmin && (
-          <div className="text-center text-white bg-red-600">
+          <div className="text-center text-white bg-red-600 p-2">
             Zeit zum Zu-/Absagen abgelaufen!
           </div>
         )}
@@ -155,6 +155,7 @@ export const EventCard = ({ event }: EventCardProps) => {
           ConfirmedParticipant={event.attributes.zusage.data}
           TentativeParticipant={event.attributes.unsicher.data}
           CancelledParticipant={event.attributes.absage.data}
+          EventId={event.id}
         />
       )}
     </div>

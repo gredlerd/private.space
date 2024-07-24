@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { PageHeadline } from "../components/PageHeadline";
 import OverLayout from "../components/OverLayout/overLayout";
+import { Sparkles } from "lucide-react";
 
 interface Inputs {
   identifier: string;
@@ -103,6 +104,15 @@ export default function Login() {
             >
               <p> Jetzt registrieren</p>
             </button>
+          </div>
+          <div className="flex flex-row gap-2 items-center pt-20">
+            <span className="text-lg ">
+              Willkommen bei der DiamirEventsoftware - Ihr Partner für
+              Eventmanagement!
+            </span>
+            <span className="text-marketingGold">
+              <Sparkles className="w-8 h-8" />
+            </span>
           </div>
         </form>
         {loginError && (
